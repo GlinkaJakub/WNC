@@ -14,6 +14,11 @@ public class UserServiceImpl implements UserService {
 
     private ConverterAdapter<User, UserDao> userDaoToDto;
 
+    public UserServiceImpl(UserRepository userRepository, ConverterAdapter<User, UserDao> userDaoToDto) {
+        this.userRepository = userRepository;
+        this.userDaoToDto = userDaoToDto;
+    }
+
     @Override
     public List<User> findAll() {
         return userDaoToDto.convertToList(userRepository.findAll());

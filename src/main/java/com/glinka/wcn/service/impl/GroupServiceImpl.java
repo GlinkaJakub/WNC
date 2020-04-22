@@ -14,6 +14,11 @@ public class GroupServiceImpl implements GroupService {
 
     private ConverterAdapter<Group, GroupDao> groupDaoToDtoConverter;
 
+    public GroupServiceImpl(GroupRepository groupRepository, ConverterAdapter<Group, GroupDao> groupDaoToDtoConverter) {
+        this.groupRepository = groupRepository;
+        this.groupDaoToDtoConverter = groupDaoToDtoConverter;
+    }
+
     @Override
     public List<Group> findAll() {
         return groupDaoToDtoConverter.convertToList(groupRepository.findAll());

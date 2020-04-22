@@ -14,6 +14,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     private ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter;
 
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter) {
+        this.categoryRepository = categoryRepository;
+        this.categoryDaoToDtoConverter = categoryDaoToDtoConverter;
+    }
+
     @Override
     public List<Category> findAll() {
         return categoryDaoToDtoConverter.convertToList(categoryRepository.findAll());

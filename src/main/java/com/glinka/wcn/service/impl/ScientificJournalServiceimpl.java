@@ -14,6 +14,11 @@ public class ScientificJournalServiceimpl implements ScientificJournalService {
 
     private ConverterAdapter<ScientificJournal, ScientificJournalDao> scientificJournalDaoToDtoConverter;
 
+    public ScientificJournalServiceimpl(ScientificJournalRepository scientificJournalRepository, ConverterAdapter<ScientificJournal, ScientificJournalDao> scientificJournalDaoToDtoConverter) {
+        this.scientificJournalRepository = scientificJournalRepository;
+        this.scientificJournalDaoToDtoConverter = scientificJournalDaoToDtoConverter;
+    }
+
     @Override
     public List<ScientificJournal> findAll() {
         return scientificJournalDaoToDtoConverter.convertToList(scientificJournalRepository.findAll());
