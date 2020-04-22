@@ -1,4 +1,4 @@
-package com.glinka.wcn.dto;
+package com.glinka.wcn.model.dto;
 
 import lombok.Data;
 
