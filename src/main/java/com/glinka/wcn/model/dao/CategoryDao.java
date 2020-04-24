@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "category")
+//@Table(name = "category")
 public class CategoryDao {
 
     @Id

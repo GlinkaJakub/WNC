@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "user")
+//@Table(name = "user")
 public class UserDao {
 
     @Id
@@ -17,4 +17,12 @@ public class UserDao {
     private String password;
     private String name;
     private String surname;
+
+    public UserDao(int id, String email, String password, String name, String surname) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+    }
 }

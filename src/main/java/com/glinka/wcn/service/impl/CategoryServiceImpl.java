@@ -10,9 +10,9 @@ import java.util.List;
 
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    private ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter;
+    private final ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository, ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter) {
         this.categoryRepository = categoryRepository;
@@ -22,6 +22,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAll() {
         return categoryDaoToDtoConverter.convertToList(categoryRepository.findAll());
+    }
+
+    @Override
+    public List<Category> findAllById(List<Integer> ids) {
+        return categoryDaoToDtoConverter.convertToList(categoryRepository.findAllById(ids));
     }
 
     @Override

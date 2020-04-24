@@ -10,9 +10,9 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private ConverterAdapter<User, UserDao> userDaoToDto;
+    private final ConverterAdapter<User, UserDao> userDaoToDto;
 
     public UserServiceImpl(UserRepository userRepository, ConverterAdapter<User, UserDao> userDaoToDto) {
         this.userRepository = userRepository;
@@ -27,5 +27,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(int id) {
         return userDaoToDto.convert(userRepository.findById(id).orElse(null));
+    }
+
+    @Override
+    public List<User> findAllById(List<Integer> ids) {
+        return userDaoToDto.convertToList(userRepository.findAllById(ids));
+    }
+
+    @Override
+    public List<User> findAllByNameOrSurname(String name) {
+        List<UserDao> userDaosList = userRepository.findAllByName(name);
+        UserDao userDao = userRepository.findUserDaoByEmail(name);
+
+        for (UserDao u : userRepository.findAllBySurname(name)){
+            if (!userDaosList.contains(u))
+                userDaosList.add(u);
+        }
+        if (!userDaosList.contains(userRepository.findUserDaoByEmail(name)))
+            userDaosList.add(userDao);
+
+        return userDaoToDto.convertToList(userDaosList);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userDaoToDto.convert(userRepository.findUserDaoByEmail(email));
+    }
+
+    @Override
+    public boolean save(User user) {
+        return false;
     }
 }

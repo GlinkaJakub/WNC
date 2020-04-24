@@ -8,12 +8,12 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "scientific_journal")
+//@Table(name = "scientific_journal")
 public class ScientificJournalDao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String title1;
     private String issn1;
     private String eissn1;

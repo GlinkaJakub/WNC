@@ -8,6 +8,15 @@ public interface UserService {
 
     List<User> findAll();
 
+    List<User> findAllById(List<Integer> ids);
+
+    //   Find user by id/name/surname/email
+    List<User> findAllByNameOrSurname(String name);
+
     User findById(int id);
 
+    User findByEmail(String email);
+
+    //   Add new User
+    boolean save(User user);
 }

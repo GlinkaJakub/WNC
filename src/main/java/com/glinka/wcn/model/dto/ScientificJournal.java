@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class ScientificJournal {
 
-    private Long id;
+    private int id;
     private String title1;
     private String issn1;
     private String eissn1;
