@@ -18,11 +18,4 @@ public class UserDao {
     private String name;
     private String surname;
 
-    public UserDao(int id, String email, String password, String name, String surname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-    }
 }

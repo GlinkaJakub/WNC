@@ -1,4 +1,4 @@
-package com.glinka.wcn.model.converter.daoToDto;
+package com.glinka.wcn.model.converter.dtoToDao;
 
 import com.glinka.wcn.model.converter.ConverterAdapter;
 import com.glinka.wcn.model.dao.CategoryDao;
@@ -6,10 +6,10 @@ import com.glinka.wcn.model.dto.Category;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryDaoToDtoConverter extends ConverterAdapter<Category, CategoryDao> {
+public class CategoryDtoToDaoConverter extends ConverterAdapter<CategoryDao, Category> {
 
     @Override
-    public Category convert(Category target, CategoryDao source) {
+    public CategoryDao convert(CategoryDao target, Category source) {
 
         if (target == null || source == null)
             return null;

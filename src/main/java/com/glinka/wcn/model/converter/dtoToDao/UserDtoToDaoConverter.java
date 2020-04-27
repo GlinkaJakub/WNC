@@ -1,4 +1,4 @@
-package com.glinka.wcn.model.converter.daoToDto;
+package com.glinka.wcn.model.converter.dtoToDao;
 
 import com.glinka.wcn.model.converter.ConverterAdapter;
 import com.glinka.wcn.model.dao.UserDao;
@@ -6,11 +6,10 @@ import com.glinka.wcn.model.dto.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDaoToDtoConverter extends ConverterAdapter<User, UserDao> {
+public class UserDtoToDaoConverter extends ConverterAdapter<UserDao, User> {
 
     @Override
-    public User convert(User target, UserDao source) {
-
+    public UserDao convert(UserDao target, User source) {
         if (target == null || source == null)
             return null;
 
@@ -18,7 +17,7 @@ public class UserDaoToDtoConverter extends ConverterAdapter<User, UserDao> {
         target.setName(source.getName());
         target.setSurname(source.getSurname());
         target.setEmail(source.getEmail());
-        //TODO encrypt password
+        // TODO encrypt password
         target.setPassword(source.getPassword());
 
         return target;

@@ -6,6 +6,7 @@ import com.glinka.wcn.model.dto.User;
 
 import java.util.List;
 
+
 public interface GroupService {
 
     List<Group> findAll();

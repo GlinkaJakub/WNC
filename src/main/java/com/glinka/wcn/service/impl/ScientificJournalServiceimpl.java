@@ -7,18 +7,22 @@ import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.service.ScientificJournalService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ScientificJournalServiceimpl implements ScientificJournalService {
 
     private final ScientificJournalRepository scientificJournalRepository;
 
     private final ConverterAdapter<ScientificJournal, ScientificJournalDao> scientificJournalDaoToDtoConverter;
+    private final ConverterAdapter<ScientificJournalDao, ScientificJournal> scientificJournalDtoToDaoConverter;
 
-    public ScientificJournalServiceimpl(ScientificJournalRepository scientificJournalRepository, ConverterAdapter<ScientificJournal, ScientificJournalDao> scientificJournalDaoToDtoConverter) {
+    public ScientificJournalServiceimpl(ScientificJournalRepository scientificJournalRepository, ConverterAdapter<ScientificJournal, ScientificJournalDao> scientificJournalDaoToDtoConverter, ConverterAdapter<ScientificJournalDao, ScientificJournal> scientificJournalDtoToDaoConverter) {
         this.scientificJournalRepository = scientificJournalRepository;
         this.scientificJournalDaoToDtoConverter = scientificJournalDaoToDtoConverter;
+        this.scientificJournalDtoToDaoConverter = scientificJournalDtoToDaoConverter;
     }
 
     @Override
@@ -29,6 +33,11 @@ public class ScientificJournalServiceimpl implements ScientificJournalService {
     @Override
     public List<ScientificJournal> findAllById(List<Integer> ids) {
         return scientificJournalDaoToDtoConverter.convertToList(scientificJournalRepository.findAllById(ids));
+    }
+
+    @Override
+    public List<ScientificJournalDao> findAllDaoById(List<Integer> ids) {
+        return scientificJournalRepository.findAllById(ids);
     }
 
     @Override
@@ -53,7 +62,8 @@ public class ScientificJournalServiceimpl implements ScientificJournalService {
 
     @Override
     public boolean save(ScientificJournal scientificJournal) {
-        return false;
+        scientificJournalRepository.saveAndFlush(scientificJournalDtoToDaoConverter.convert(scientificJournal));
+        return true;
     }
 
     @Override

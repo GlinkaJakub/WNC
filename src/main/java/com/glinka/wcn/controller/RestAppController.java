@@ -1,5 +1,6 @@
 package com.glinka.wcn.controller;
 
+import com.glinka.wcn.model.dto.Category;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.model.dto.User;
@@ -7,19 +8,24 @@ import com.glinka.wcn.service.CategoryService;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class RestAppController {
 
-    private ScientificJournalService scientificJournalService;
-    private UserService userService;
-    private GroupService groupService;
-    private CategoryService categoryService;
+    private final ScientificJournalService scientificJournalService;
+    private final UserService userService;
+    private final GroupService groupService;
+    private final CategoryService categoryService;
+
+    public RestAppController(ScientificJournalService scientificJournalService, UserService userService, GroupService groupService, CategoryService categoryService) {
+        this.scientificJournalService = scientificJournalService;
+        this.userService = userService;
+        this.groupService = groupService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/")
     public String hello(){
@@ -27,11 +33,13 @@ public class RestAppController {
     }
 
     //TODO What we need?
-    //   Show all journals
-    //   Find journal by id/title/issn/eissn/category
-    //   Find user by id/name/surname/email
+    //   + Find all all
+    //   + Find journal by id
+    //   Find journal by title/issn/eissn/category
+    //   + Find user by id
+    //   Find user by name/surname/email
     //   Find journal by group/user
-    //   Add new User
+    //   + Add new User
     //   Add new journals
     //   Add new group
     //   Add user to group
@@ -41,13 +49,72 @@ public class RestAppController {
     //   Remove journal from group
 
     @GetMapping("/allScientificJournal")
-    public List<ScientificJournal> findAllScientificJournal(){
-        return scientificJournalService.findAll();
+    public String findAllScientificJournal(){
+        List<ScientificJournal> data = scientificJournalService.findAll();
+        if(data == null || data.isEmpty()){
+            return "Not found data";
+        }
+        return data.toString();
     }
 
+    @GetMapping("/allUsers")
+    public String findAllUsers(){
+        List<User> data = userService.findAll();
+        if (data == null || data.isEmpty()){
+            return "Not found data";
+        }
+        return data.toString();
+    }
+
+    @GetMapping("/allCategory")
+    public String findAllCategory(){
+        List<Category> data = categoryService.findAll();
+        if (data == null || data.isEmpty()){
+            return "Not found data";
+        }
+        return data.toString();
+    }
+
+    @GetMapping("/allGroup")
+    public String findAllGroup(){
+        List<Group> data = groupService.findAll();
+        if (data == null || data.isEmpty()){
+            return "Not found data";
+        }
+        return data.toString();
+    }
+
+    //------------------------------------------------------------------------------------------------------
+
+    @PostMapping("/saveUser")
+    public boolean saveUser(@RequestBody User user){
+        return userService.save(user);
+    }
+
+    @PostMapping("/saveCategory")
+    public boolean saveCategory(@RequestBody Category category){
+        return categoryService.save(category);
+    }
+
+    @PostMapping("/saveGroup")
+    public boolean saveGroup(@RequestBody Group group){
+        return groupService.save(group);
+    }
+
+    @PostMapping("/saveScientificJournal")
+    public boolean saveScientificJournal(@RequestBody ScientificJournal scientificJournal){
+        return scientificJournalService.save(scientificJournal);
+    }
+
+    //------------------------------------------------------------------------------------------------------
+
     @GetMapping("/findJournalById")
-    public ScientificJournal findScientificJournal(@RequestParam("id") int id){
-        return scientificJournalService.findById(id);
+    public String findScientificJournal(@RequestParam("id") int id){
+        ScientificJournal data = scientificJournalService.findById(id);
+        if (data == null){
+            return "Not found.";
+        }
+        return data.toString();
     }
 
     @GetMapping("/findUserById")
@@ -59,8 +126,6 @@ public class RestAppController {
     public List<User> findUser(@RequestParam("user") String user){
         return userService.findAllByNameOrSurname(user);
     }
-
-
 
 
 

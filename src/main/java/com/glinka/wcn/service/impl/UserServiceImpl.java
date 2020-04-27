@@ -5,18 +5,22 @@ import com.glinka.wcn.model.dao.UserDao;
 import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
     private final ConverterAdapter<User, UserDao> userDaoToDto;
+    private final ConverterAdapter<UserDao, User> userDtoToDao;
 
-    public UserServiceImpl(UserRepository userRepository, ConverterAdapter<User, UserDao> userDaoToDto) {
+    public UserServiceImpl(UserRepository userRepository, ConverterAdapter<User, UserDao> userDaoToDto, ConverterAdapter<UserDao, User> userDtoToDao) {
         this.userRepository = userRepository;
         this.userDaoToDto = userDaoToDto;
+        this.userDtoToDao = userDtoToDao;
     }
 
     @Override
@@ -32,6 +36,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllById(List<Integer> ids) {
         return userDaoToDto.convertToList(userRepository.findAllById(ids));
+    }
+
+    @Override
+    public List<UserDao> findAllDaoById(List<Integer> ids) {
+        return userRepository.findAllById(ids);
     }
 
     @Override
@@ -56,6 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean save(User user) {
-        return false;
+        userRepository.saveAndFlush(userDtoToDao.convert(user));
+        return true;
     }
 }

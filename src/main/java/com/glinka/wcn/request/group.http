@@ -1,0 +1,40 @@
+POST http://localhost:8282/saveGroup
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "group1",
+  "users": [
+    {
+      "id": 1,
+      "name": "Jakub",
+      "surname": "Glinka",
+      "email": "jakub@mail.com",
+      "password": "haslo"
+    }
+  ],
+  "journals": [
+    {
+      "id": 3,
+      "title1": "tyt1",
+      "issn1": "i1",
+      "eissn1": "e1",
+      "title2": "tyt2",
+      "issn2":  "i2",
+      "eissn2": "e2",
+      "points": 50,
+      "categories": [
+        {
+          "id": 2,
+          "name": "category1"
+        }
+      ]
+    }
+  ]
+}
+
+###
+GET http://localhost:8282/allGroup
+Accept: application/json
+
+###

@@ -1,8 +1,8 @@
-package com.glinka.wcn.model.converter.daoToDto;
+package com.glinka.wcn.model.converter.dtoToDao;
 
 import com.glinka.wcn.model.converter.ConverterAdapter;
-import com.glinka.wcn.model.dao.CategoryDao;
 import com.glinka.wcn.model.dao.ScientificJournalDao;
+import com.glinka.wcn.model.dto.Category;
 import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.service.CategoryService;
 import org.springframework.stereotype.Component;
@@ -11,22 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ScientificJournalDaoToDtoConverter extends ConverterAdapter<ScientificJournal, ScientificJournalDao> {
+public class ScientificJournalDtoToDaoConverter extends ConverterAdapter<ScientificJournalDao, ScientificJournal> {
 
     private final CategoryService categoryService;
 
-    public ScientificJournalDaoToDtoConverter(CategoryService categoryService) {
+    public ScientificJournalDtoToDaoConverter(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @Override
-    public ScientificJournal convert(ScientificJournal target, ScientificJournalDao source) {
+    public ScientificJournalDao convert(ScientificJournalDao target, ScientificJournal source) {
 
         if (target == null || source == null)
             return null;
 
         List<Integer> categoryIds = new ArrayList<>();
-        for (CategoryDao category : source.getCategories()){
+        for (Category category : source.getCategories()){
             categoryIds.add(category.getId());
         }
 
@@ -38,7 +38,7 @@ public class ScientificJournalDaoToDtoConverter extends ConverterAdapter<Scienti
         target.setIssn2(source.getIssn2());
         target.setEissn2(source.getEissn2());
         target.setPoints(source.getPoints());
-        target.setCategories(categoryService.findAllById(categoryIds));
+        target.setCategories(categoryService.findAllDaoById(categoryIds));
 
         return target;
     }

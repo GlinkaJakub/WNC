@@ -7,18 +7,22 @@ import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.service.GroupService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
 
     private final ConverterAdapter<Group, GroupDao> groupDaoToDtoConverter;
+    private final ConverterAdapter<GroupDao, Group> groupDtoToDaoConverter;
 
-    public GroupServiceImpl(GroupRepository groupRepository, ConverterAdapter<Group, GroupDao> groupDaoToDtoConverter) {
+    public GroupServiceImpl(GroupRepository groupRepository, ConverterAdapter<Group, GroupDao> groupDaoToDtoConverter, ConverterAdapter<GroupDao, Group> groupDtoToDaoConverter) {
         this.groupRepository = groupRepository;
         this.groupDaoToDtoConverter = groupDaoToDtoConverter;
+        this.groupDtoToDaoConverter = groupDtoToDaoConverter;
     }
 
     @Override
@@ -33,7 +37,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean save(Group group) {
-        return false;
+        groupRepository.saveAndFlush(groupDtoToDaoConverter.convert(group));
+        return true;
     }
 
     @Override
