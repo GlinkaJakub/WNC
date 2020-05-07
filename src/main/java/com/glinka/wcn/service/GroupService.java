@@ -1,8 +1,8 @@
 package com.glinka.wcn.service;
 
+import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
-import com.glinka.wcn.model.dto.User;
 
 import java.util.List;
 
@@ -10,16 +10,20 @@ import java.util.List;
 public interface GroupService {
 
     List<Group> findAll();
-    Group findById(int id);
+    Group findById(Integer id) throws ResourceNotFoundException;
     //   Add new group
-    boolean save(Group group);
+    Group save(Group group);
     //   Add journal to group
-    boolean addJournal(ScientificJournal scientificJournal, Group group);
+    Group addJournal(Integer scientificJournalId, Integer groupId) throws ResourceNotFoundException ;
     //   Add user to group
-    boolean addUser(User user,Group group);
+    Group addUser(Integer userId, Integer groupId) throws ResourceNotFoundException ;
     //   Remove user from group
-    boolean removeUser(User user, Group group);
+    void removeUser(Integer userId, Integer groupId) throws ResourceNotFoundException;
     //   Remove journal from group
-    boolean removeJournal(ScientificJournal scientificJournal, Group group);
+    void removeJournal(Integer scientificJournalId, Integer groupId) throws ResourceNotFoundException;
+    //   Find Journals by group
+    List<ScientificJournal> findJournalsByGroup(Integer groupId) throws ResourceNotFoundException;
+
+
 
 }

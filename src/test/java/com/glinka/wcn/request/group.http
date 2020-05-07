@@ -1,3 +1,4 @@
+### save
 POST http://localhost:8282/saveGroup
 Content-Type: application/json
 
@@ -33,8 +34,31 @@ Content-Type: application/json
   ]
 }
 
-###
+### findAll
 GET http://localhost:8282/allGroup
 Accept: application/json
 
-###
+### findById
+
+GET http://localhost:8282/findGroupById?id=4
+Accept: application/json
+
+### addJournal
+
+GET http://localhost:8282/addJournalToGroup?groupId=4&journalId=3
+Accept: application/json
+
+### addUser
+
+GET http://localhost:8282/addUserToGroup?groupId=4&userId=1
+Accept: application/json
+
+### removeJoural
+
+GET http://localhost:8282/removeJournalFromGroup?groupId=4&journalId=3
+Accept: application/json
+
+###removeUser
+
+GET http://localhost:8282/removeUserFromGroup?groupId=4&userId=1
+Accept: application/json

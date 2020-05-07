@@ -1,4 +1,4 @@
-package com.glinka.wcn.service2.mapper;
+package com.glinka.wcn.service.mapper;
 
 public interface Mapper<Dto, Dao> {
 

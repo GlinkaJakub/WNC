@@ -1,71 +1,69 @@
 package com.glinka.wcn.service.impl;
 
-import com.glinka.wcn.model.converter.ConverterAdapter;
+import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dao.UserDao;
 import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.UserService;
+import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final Mapper<User, UserDao> userMapper;
     private final UserRepository userRepository;
 
-    private final ConverterAdapter<User, UserDao> userDaoToDto;
-    private final ConverterAdapter<UserDao, User> userDtoToDao;
-
-    public UserServiceImpl(UserRepository userRepository, ConverterAdapter<User, UserDao> userDaoToDto, ConverterAdapter<UserDao, User> userDtoToDao) {
+    public UserServiceImpl(Mapper<User, UserDao> userMapper, UserRepository userRepository) {
+        this.userMapper = userMapper;
         this.userRepository = userRepository;
-        this.userDaoToDto = userDaoToDto;
-        this.userDtoToDao = userDtoToDao;
     }
 
     @Override
-    public List<User> findAll() {
-        return userDaoToDto.convertToList(userRepository.findAll());
+    public User save(User user){
+        return userMapper.mapToDto(userRepository.saveAndFlush(userMapper.mapToDao(user)));
     }
 
     @Override
-    public User findById(int id) {
-        return userDaoToDto.convert(userRepository.findById(id).orElse(null));
+    public User findById(Integer id) throws ResourceNotFoundException {
+        Optional<UserDao> userDao = userRepository.findById(id);
+        return userMapper.mapToDto(userDao.orElseThrow(
+                () -> new ResourceNotFoundException("User with id :" + id + " not found")
+        ));
     }
 
     @Override
-    public List<User> findAllById(List<Integer> ids) {
-        return userDaoToDto.convertToList(userRepository.findAllById(ids));
+    public List<User> findAll(){
+        return userRepository.findAll().stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<UserDao> findAllDaoById(List<Integer> ids) {
-        return userRepository.findAllById(ids);
+    public void delete(Integer id) throws ResourceNotFoundException{
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<User> findAllById(List<Integer> ids){
+        List<UserDao> userDaoList = userRepository.findAllById(ids);
+        return userDaoList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<User> findAllByNameOrSurname(String name) {
-        List<UserDao> userDaosList = userRepository.findAllByName(name);
-        UserDao userDao = userRepository.findUserDaoByEmail(name);
-
-        for (UserDao u : userRepository.findAllBySurname(name)){
-            if (!userDaosList.contains(u))
-                userDaosList.add(u);
-        }
-        if (!userDaosList.contains(userRepository.findUserDaoByEmail(name)))
-            userDaosList.add(userDao);
-
-        return userDaoToDto.convertToList(userDaosList);
+        List<UserDao> userDaoList = userRepository.findAllByName(name);
+        userDaoList.addAll(userRepository.findAllBySurname(name));
+        return userDaoList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
     public User findByEmail(String email) {
-        return userDaoToDto.convert(userRepository.findUserDaoByEmail(email));
+        UserDao userDao = userRepository.findUserDaoByEmail(email);
+        return userMapper.mapToDto(userDao);
     }
 
-    @Override
-    public boolean save(User user) {
-        userRepository.saveAndFlush(userDtoToDao.convert(user));
-        return true;
-    }
 }
+

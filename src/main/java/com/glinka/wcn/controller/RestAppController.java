@@ -1,5 +1,6 @@
 package com.glinka.wcn.controller;
 
+import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.Category;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
@@ -27,7 +28,7 @@ public class RestAppController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/api")
     public String hello(){
         return "<b>Wyszukiwarka Czasopism Naukowych</b> <br> <i>Politechnika Warszawska</i>";
     }
@@ -35,18 +36,25 @@ public class RestAppController {
     //TODO What we need?
     //   + Find all all
     //   + Find journal by id
-    //   Find journal by title/issn/eissn/category
+    //   + Find journal by title/issn/eissn/
+    //   Find journal by category
     //   + Find user by id
-    //   Find user by name/surname/email
-    //   Find journal by group/user
+    //   + Find user by name/surname/email
+    //   Find all journal by group/user
     //   + Add new User
-    //   Add new journals
-    //   Add new group
-    //   Add user to group
-    //   Add journal to group
-    //   Remove journal
-    //   Remove user from group
-    //   Remove journal from group
+    //   + Add new journals
+    //   + Add new group
+    //   + Add user to group
+    //   + Add journal to group
+    //   + Remove journal
+    //   + Remove category
+    //   + Remove user
+    //   + Remove user from group
+    //   + Remove journal from group
+    //
+    //   Add when save User, add group
+
+    //---FindAll--------------------------------------------------------------------------------------------------
 
     @GetMapping("/allScientificJournal")
     public String findAllScientificJournal(){
@@ -84,32 +92,32 @@ public class RestAppController {
         return data.toString();
     }
 
-    //------------------------------------------------------------------------------------------------------
+    //---Save---------------------------------------------------------------------------------------------------
 
     @PostMapping("/saveUser")
-    public boolean saveUser(@RequestBody User user){
+    public User saveUser(@RequestBody User user){
         return userService.save(user);
     }
 
     @PostMapping("/saveCategory")
-    public boolean saveCategory(@RequestBody Category category){
+    public Category saveCategory(@RequestBody Category category){
         return categoryService.save(category);
     }
 
     @PostMapping("/saveGroup")
-    public boolean saveGroup(@RequestBody Group group){
+    public Group saveGroup(@RequestBody Group group){
         return groupService.save(group);
     }
 
     @PostMapping("/saveScientificJournal")
-    public boolean saveScientificJournal(@RequestBody ScientificJournal scientificJournal){
+    public ScientificJournal saveScientificJournal(@RequestBody ScientificJournal scientificJournal){
         return scientificJournalService.save(scientificJournal);
     }
 
-    //------------------------------------------------------------------------------------------------------
+    //---FindBy---------------------------------------------------------------------------------------------------
 
     @GetMapping("/findJournalById")
-    public String findScientificJournal(@RequestParam("id") int id){
+    public String findScientificJournal(@RequestParam("id") int id) throws ResourceNotFoundException {
         ScientificJournal data = scientificJournalService.findById(id);
         if (data == null){
             return "Not found.";
@@ -117,8 +125,28 @@ public class RestAppController {
         return data.toString();
     }
 
+    @GetMapping("/findAllJournalsByIds")
+    public List<ScientificJournal> findScientificJournalsByIds(@RequestParam("ids") List<Integer> ids){
+        return scientificJournalService.findAllById(ids);
+    }
+
+    @GetMapping("/findAllJournalsByTitle")
+    public List<ScientificJournal> findScientificJournalsByTitle(@RequestParam("title") String title){
+        return scientificJournalService.findAllByTitle(title);
+    }
+
+    @GetMapping("/findAllJournalsByIssn")
+    public List<ScientificJournal> findScientificJournalsByIssn(@RequestParam("issn") String issn){
+        return scientificJournalService.findAllByIssn(issn);
+    }
+
+    @GetMapping("/findAllJournalsByEissn")
+    public List<ScientificJournal> findScientificJournalsByEissn(@RequestParam("eissn") String eissn){
+        return scientificJournalService.findAllByEissn(eissn);
+    }
+
     @GetMapping("/findUserById")
-    public User userById(@RequestParam("id") int id){
+    public User userById(@RequestParam("id") int id) throws ResourceNotFoundException {
         return userService.findById(id);
     }
 
@@ -128,6 +156,72 @@ public class RestAppController {
     }
 
 
+    @GetMapping("/findUserByEmail")
+    public User findUserByEmail(@RequestParam("user") String email){
+        return userService.findByEmail(email);
+    }
 
+    @GetMapping("/findAllUsersByIds")
+    public List<User> findAllUsersByIds(@RequestParam List<Integer> ids){
+        return userService.findAllById(ids);
+    }
 
+    @GetMapping("/findCategoryById")
+    public Category findCategoryById(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+        return categoryService.findById(id);
+    }
+
+    @GetMapping("/findAllCategoryByIds")
+    public List<Category> findAllCategoryByIds(@RequestParam List<Integer> ids){
+        return categoryService.findAllById(ids);
+    }
+
+    @GetMapping("/findGroupById")
+    public Group findGroupById(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+        return groupService.findById(id);
+    }
+
+    @GetMapping("/findJournalsByGroup")
+    public List<ScientificJournal> findJournalsByGroup(@RequestParam("groupId") Integer groupId) throws ResourceNotFoundException {
+        return groupService.findJournalsByGroup(groupId);
+    }
+
+    //---Delete---------------------------------------------------------------------------------------------------
+
+    @GetMapping("/deleteUser")
+    public void deleteUser(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+        userService.delete(id);
+    }
+
+    @GetMapping("/deleteCategory")
+    public void deleteCategory(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+        categoryService.delete(id);
+    }
+
+    @GetMapping("/deleteScientificJournal")
+    public void deleteScientificJournal(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+        scientificJournalService.delete(id);
+    }
+
+    //---GroupManipulateList----------------------------------------------------------------------------------------
+
+    @GetMapping("/addJournalToGroup")
+    public Group addJournalToGroup(@RequestParam("groupId") Integer groupId, @RequestParam("journalId") Integer journalId) throws ResourceNotFoundException {
+        return groupService.addJournal(journalId, groupId);
+    }
+
+    @GetMapping("/removeJournalFromGroup")
+    public void removeJournalFromGroup(@RequestParam("groupId") Integer groupId, @RequestParam("journalId") Integer journalId) throws ResourceNotFoundException {
+        groupService.removeJournal(journalId, groupId);
+    }
+
+    @GetMapping("/addUserToGroup")
+    public Group addUserToGroup(@RequestParam("groupId") Integer groupId, @RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+        return groupService.addUser(userId, groupId);
+    }
+
+    @GetMapping("/removeUserFromGroup")
+    public void removeUserFromGroup(@RequestParam("groupId") Integer groupId, @RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+        groupService.removeUser(userId, groupId);
+    }
 }

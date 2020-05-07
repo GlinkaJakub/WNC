@@ -1,18 +1,18 @@
-package com.glinka.wcn.service2.impl2;
+package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dao.ScientificJournalDao;
 import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.repository.ScientificJournalRepository;
-import com.glinka.wcn.service2.ScientificJournalService;
-import com.glinka.wcn.service2.mapper.Mapper;
+import com.glinka.wcn.service.ScientificJournalService;
+import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//@Service
+@Service
 public class ScientificJournalServiceImpl implements ScientificJournalService {
 
     private final Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper;

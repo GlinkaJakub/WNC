@@ -1,0 +1,27 @@
+### save
+POST http://localhost:8282/saveCategory
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "category1"
+}
+
+### findAll
+GET http://localhost:8282/allCategory
+Accept: application/json
+
+### findAllById
+
+GET http://localhost:8282/findAllUsersByIds?ids=2,3
+Content-Type: application/json
+
+### findById
+
+GET http://localhost:8282/findCategoryById?id=2
+Accept: application/json
+
+### delete
+
+GET http://localhost:8282/deleteCategory?id=2
+Accept: application/json

@@ -1,4 +1,4 @@
-package com.glinka.wcn.service2.mapper;
+package com.glinka.wcn.service.mapper;
 
 import com.glinka.wcn.model.dao.CategoryDao;
 import com.glinka.wcn.model.dto.Category;
