@@ -6,6 +6,7 @@ import com.glinka.wcn.model.dao.ScientificJournalDao;
 import com.glinka.wcn.model.dao.UserDao;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
+import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.repository.UserRepository;
@@ -13,6 +14,7 @@ import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,6 +47,11 @@ public class GroupServiceImpl implements GroupService {
         return groupMapper.mapToDto(groupDao.orElseThrow(
                 () -> new ResourceNotFoundException("Group with id: " + id + " not found.")
         ));
+    }
+
+    @Override
+    public List<Group> findAllByIds(List<Integer> ids) {
+        return groupRepository.findAllById(ids).stream().map(groupMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -81,6 +88,7 @@ public class GroupServiceImpl implements GroupService {
         if (userDaoList.contains(newUser)){
             return groupMapper.mapToDto(groupDao);
         }
+        userDaoList.add(newUser);
         groupDao.setUsers(userDaoList);
         return groupMapper.mapToDto(groupRepository.saveAndFlush(groupDao));
     }
@@ -118,5 +126,18 @@ public class GroupServiceImpl implements GroupService {
         return groupDao.getJournalDaos().stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
-
+    @Override
+    public List<Group> findAllByUser(Integer userId) throws ResourceNotFoundException {
+        List<GroupDao> groupDaos = groupRepository.findAll();
+        UserDao userDao = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User with id: " + userId + " not found.")
+        );
+        List<GroupDao> groupDaosByUser = new ArrayList<>();
+        for(GroupDao groupDao: groupDaos){
+            if(groupDao.getUsers().contains(userDao)){
+                groupDaosByUser.add(groupDao);
+            }
+        }
+        return groupDaosByUser.stream().map(groupMapper::mapToDto).collect(Collectors.toList());
+    }
 }

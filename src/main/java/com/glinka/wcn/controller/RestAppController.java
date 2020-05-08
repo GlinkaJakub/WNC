@@ -186,6 +186,11 @@ public class RestAppController {
         return groupService.findJournalsByGroup(groupId);
     }
 
+    @GetMapping("/findGroupsByUser")
+    public List<Group> findAllGroupsByUser(@RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+        return groupService.findAllByUser(userId);
+    }
+
     //---Delete---------------------------------------------------------------------------------------------------
 
     @GetMapping("/deleteUser")

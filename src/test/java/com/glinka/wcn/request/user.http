@@ -22,12 +22,12 @@ Accept: application/json
 
 ### delete
 
-GET http://localhost:8282/deleteUser?id=1
+GET http://localhost:8282/deleteUser?id=2
 Accept: application/json
 
 ### findAllById
 
-GET http://localhost:8282/findAllUsersByIds?ids=1,3
+GET http://localhost:8282/findAllUsersByIds?ids=1,4
 Content-Type: application/json
 
 ### findAllByNameOrSurname
@@ -37,7 +37,7 @@ Accept: application/json
 
 ### findByEmail
 
-GET http://localhost:8282/findUserByEmail?user=jakub@mail.com
+GET http://localhost:8282/findUserByEmail?user=jakub1@mail.com
 Accept: application/json
 
 ###

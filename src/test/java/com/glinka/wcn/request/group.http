@@ -3,7 +3,7 @@ POST http://localhost:8282/saveGroup
 Content-Type: application/json
 
 {
-  "id": 4,
+  "id": 1,
   "name": "group1",
   "users": [
     {
@@ -27,7 +27,7 @@ Content-Type: application/json
       "categories": [
         {
           "id": 2,
-          "name": "category1"
+          "name": "category3"
         }
       ]
     }
@@ -40,25 +40,30 @@ Accept: application/json
 
 ### findById
 
-GET http://localhost:8282/findGroupById?id=4
+GET http://localhost:8282/findGroupById?id=11
+Accept: application/json
+
+### findByUser
+
+GET http://localhost:8282/findGroupsByUser?userId=5
 Accept: application/json
 
 ### addJournal
 
-GET http://localhost:8282/addJournalToGroup?groupId=4&journalId=3
+GET http://localhost:8282/addJournalToGroup?groupId=11&journalId=10
 Accept: application/json
 
 ### addUser
 
-GET http://localhost:8282/addUserToGroup?groupId=4&userId=1
+GET http://localhost:8282/addUserToGroup?groupId=5&userId=2
 Accept: application/json
 
 ### removeJoural
 
-GET http://localhost:8282/removeJournalFromGroup?groupId=4&journalId=3
+GET http://localhost:8282/removeJournalFromGroup?groupId=11&journalId=10
 Accept: application/json
 
 ###removeUser
 
-GET http://localhost:8282/removeUserFromGroup?groupId=4&userId=1
+GET http://localhost:8282/removeUserFromGroup?groupId=11&userId=1
 Accept: application/json

@@ -50,7 +50,7 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
 
     @Override
     public List<ScientificJournal> findAllByIssn(String word) {
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn1Containing(word, word);
+        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word);
         return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 

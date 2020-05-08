@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,5 +18,6 @@ public class User {
     private String password;
     private String name;
     private String surname;
+//    private List<Group> groups;
 
 }

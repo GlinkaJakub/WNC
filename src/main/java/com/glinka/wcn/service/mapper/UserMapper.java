@@ -4,6 +4,7 @@ import com.glinka.wcn.model.dao.UserDao;
 import com.glinka.wcn.model.dto.User;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class UserMapper implements Mapper<User, UserDao> {
 

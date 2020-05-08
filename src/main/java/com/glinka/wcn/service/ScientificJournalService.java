@@ -23,8 +23,7 @@ public interface ScientificJournalService {
 
     //TODO
     // find all by category
-    // Find journal by group/user
+    // Find journal by user
 //    List<ScientificJournal> findAllByUser(User user);
-//    List<ScientificJournal> findAllByGroup(Group group);
 //    List<ScientificJournalDao> findAllDaoById(List<Integer> ids);
 }

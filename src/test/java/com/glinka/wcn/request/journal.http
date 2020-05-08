@@ -14,7 +14,7 @@ Content-Type: application/json
   "categories": [
     {
       "id": 2,
-      "name": "category1"
+      "name": "category3"
     }
   ]
 }
@@ -25,12 +25,12 @@ Accept: application/json
 
 ### findById
 
-GET http://localhost:8282/findJournalById?id=3
+GET http://localhost:8282/findJournalById?id=9
 Accept: application/json
 
 ### findAllById
 
-GET http://localhost:8282/findAllCategoryByIds?ids=3
+GET http://localhost:8282/findAllJournalsByIds?ids=10,9
 Accept: application/json
 
 ### findByTitle
@@ -54,5 +54,5 @@ GET http://localhost:8282/findJournalsByGroup?groupId=4
 Accept: application/json
 
 ### delete
-GET http://localhost:8282/deleteScientificJournal?id=3
+GET http://localhost:8282/deleteScientificJournal?id=10
 Accept: application/json

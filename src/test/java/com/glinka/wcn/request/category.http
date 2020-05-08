@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "id": 2,
-  "name": "category1"
+  "name": "category3"
 }
 
 ### findAll
@@ -13,15 +13,15 @@ Accept: application/json
 
 ### findAllById
 
-GET http://localhost:8282/findAllUsersByIds?ids=2,3
+GET http://localhost:8282/findAllCategoryByIds?ids=6,8
 Content-Type: application/json
 
 ### findById
 
-GET http://localhost:8282/findCategoryById?id=2
+GET http://localhost:8282/findCategoryById?id=7
 Accept: application/json
 
 ### delete
 
-GET http://localhost:8282/deleteCategory?id=2
+GET http://localhost:8282/deleteCategory?id=7
 Accept: application/json
