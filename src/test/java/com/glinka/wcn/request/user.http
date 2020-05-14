@@ -1,0 +1,43 @@
+### save
+
+POST http://localhost:8282/saveUser
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "Jakub",
+  "surname": "Glinka",
+  "email": "jakub@mail.com",
+  "password": "haslo"
+}
+### findAll
+
+GET http://localhost:8282/allUsers
+Accept: application/json
+
+### findById
+
+GET http://localhost:8282/findUserById?id=1
+Accept: application/json
+
+### delete
+
+GET http://localhost:8282/deleteUser?id=2
+Accept: application/json
+
+### findAllById
+
+GET http://localhost:8282/findAllUsersByIds?ids=1,4
+Content-Type: application/json
+
+### findAllByNameOrSurname
+
+GET http://localhost:8282/findUser?user=Glinka
+Accept: application/json
+
+### findByEmail
+
+GET http://localhost:8282/findUserByEmail?user=jakub1@mail.com
+Accept: application/json
+
+###

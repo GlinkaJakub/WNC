@@ -1,0 +1,69 @@
+### save
+POST http://localhost:8282/saveGroup
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "group1",
+  "users": [
+    {
+      "id": 1,
+      "name": "Jakub",
+      "surname": "Glinka",
+      "email": "jakub@mail.com",
+      "password": "haslo"
+    }
+  ],
+  "journals": [
+    {
+      "id": 3,
+      "title1": "tyt1",
+      "issn1": "i1",
+      "eissn1": "e1",
+      "title2": "tyt2",
+      "issn2":  "i2",
+      "eissn2": "e2",
+      "points": 50,
+      "categories": [
+        {
+          "id": 2,
+          "name": "category3"
+        }
+      ]
+    }
+  ]
+}
+
+### findAll
+GET http://localhost:8282/allGroup
+Accept: application/json
+
+### findById
+
+GET http://localhost:8282/findGroupById?id=11
+Accept: application/json
+
+### findByUser
+
+GET http://localhost:8282/findGroupsByUser?userId=5
+Accept: application/json
+
+### addJournal
+
+GET http://localhost:8282/addJournalToGroup?groupId=11&journalId=10
+Accept: application/json
+
+### addUser
+
+GET http://localhost:8282/addUserToGroup?groupId=5&userId=2
+Accept: application/json
+
+### removeJoural
+
+GET http://localhost:8282/removeJournalFromGroup?groupId=11&journalId=10
+Accept: application/json
+
+###removeUser
+
+GET http://localhost:8282/removeUserFromGroup?groupId=11&userId=1
+Accept: application/json
