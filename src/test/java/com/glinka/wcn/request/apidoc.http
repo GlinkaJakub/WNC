@@ -1,0 +1,4 @@
+GET http://localhost:8282/v2/api-docs
+Accept: application/json
+
+###
