@@ -16,6 +16,7 @@ public interface ScientificJournalService {
     List<ScientificJournal> findAllByTitle(String word);
     List<ScientificJournal> findAllByIssn(String word);
     List<ScientificJournal> findAllByEissn(String word);
+    List<ScientificJournal> findAllByCategory(Integer categoryId) throws ResourceNotFoundException;
     //   Remove journal
     void delete(Integer id) throws ResourceNotFoundException;
     //   Add new journals

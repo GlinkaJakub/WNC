@@ -28,7 +28,7 @@ public class RestAppController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/api")
+    @GetMapping("/hello")
     public String hello(){
         return "<b>Wyszukiwarka Czasopism Naukowych</b> <br> <i>Politechnika Warszawska</i>";
     }
