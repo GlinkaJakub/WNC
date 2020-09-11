@@ -1,8 +1,5 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dao.UserDao;
-import com.glinka.wcn.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -33,12 +30,12 @@ public class WcnApplication {
     }
 
     private ApiInfo createApiInfo() {
-        return new ApiInfo("Wyszykiwarka Czasopism Nauowych API",
+        return new ApiInfo("Wyszykiwarka Czasopism Naukowych API",
                 "Wyszykiwarka Czasopism Nauowych API",
-                "verionn 1.0.0",
+                "version 1.0.0",
                 "http://url.pl",
                 new Contact("User", "http://url.pl", "my@mail.pl"),
-                "mi licenese",
+                "my license",
                 "http://license.url.pl",
                 Collections.emptyList()
                 );

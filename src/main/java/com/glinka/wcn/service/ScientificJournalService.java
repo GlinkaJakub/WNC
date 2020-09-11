@@ -9,14 +9,14 @@ import java.util.List;
 public interface ScientificJournalService {
 
     //   Show all journals
-    List<ScientificJournal> findAll();
-    List<ScientificJournal> findAllById(List<Integer> ids);
+    List<ScientificJournal> findAll(String column);
+    List<ScientificJournal> findAllById(List<Integer> ids, String column);
     ScientificJournal findById(Integer id) throws ResourceNotFoundException;
     //   Find journal by id/title/issn/eissn/category
-    List<ScientificJournal> findAllByTitle(String word);
-    List<ScientificJournal> findAllByIssn(String word);
-    List<ScientificJournal> findAllByEissn(String word);
-    List<ScientificJournal> findAllByCategory(Integer categoryId) throws ResourceNotFoundException;
+    List<ScientificJournal> findAllByTitle(String word, String column);
+    List<ScientificJournal> findAllByIssn(String word, String column);
+    List<ScientificJournal> findAllByEissn(String word, String column);
+    List<ScientificJournal> findAllByCategory(Integer categoryId, String column) throws ResourceNotFoundException;
     //   Remove journal
     void delete(Integer id) throws ResourceNotFoundException;
     //   Add new journals

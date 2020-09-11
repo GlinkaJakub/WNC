@@ -26,7 +26,7 @@ public class ScientificJournalDao {
     private String eissn2;
     private int points;
 
-    @OneToMany
+    @ManyToMany
     private List<CategoryDao> categories;
 
 }
