@@ -4,7 +4,7 @@ POST http://localhost:8282/saveUser
 Content-Type: application/json
 
 {
-  "id": 3,
+  "id": 1,
   "name": "Jakub",
   "surname": "Glinka",
   "email": "jakub@mail.com",
