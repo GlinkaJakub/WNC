@@ -22,7 +22,7 @@ Accept: application/json
 
 ### delete
 
-GET http://localhost:8282/deleteUser?id=2
+GET http://localhost:8282/deleteUser?id=1
 Accept: application/json
 
 ### findAllById

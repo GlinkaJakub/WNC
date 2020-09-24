@@ -26,7 +26,7 @@ public class ScientificJournalDao {
     private String eissn2;
     private int points;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<CategoryDao> categories;
 
 }

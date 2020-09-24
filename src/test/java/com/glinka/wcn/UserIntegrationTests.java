@@ -4,27 +4,17 @@ import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-    //delete data from table
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class UserIntegrationTests {
-
-    @LocalServerPort
-    private int port;
-
-    TestRestTemplate restTemplate = new TestRestTemplate();
-    HttpHeaders headers = new HttpHeaders();
+class UserIntegrationTests extends BaseIntegrationTests {
 
     @Autowired
     UserService userService;
@@ -84,6 +74,25 @@ class UserIntegrationTests {
     }
 
     @Test
+    public void testDeleteUser() throws Exception {
+        //given
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        int id = 1;
+        userService.save(new User(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new User(2, "email2@wp.pl", "password2", "name2", "surname2"));
+        //when
+        ResponseEntity<User> response = restTemplate.exchange(
+                createURLWithPort("/api/user/deleteUser?id={id}"),
+                HttpMethod.GET,
+                entity,
+                User.class,
+                id);
+        //then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, userService.findAll().size());
+    }
+
+    @Test
     public void testFindUserByName() throws Exception {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
@@ -134,10 +143,7 @@ class UserIntegrationTests {
         List<Integer> ids = new ArrayList<>();
         ids.add(1);
         ids.add(3);
-        String idsToString = ids.toString()
-                .replace("[", "")  //remove the right bracket
-                .replace("]", "")  //remove the left bracket
-                .trim();
+        String idsToString = idsToString(ids);
         User user1 = new User(1, "email@wp.pl", "password", "name1", "surname1");
         User user2 = new User(2, "email2@wp.pl", "password2", "name2", "surname2");
         User user3 = new User(3, "email3@wp.pl", "password2", "name2", "surname2");
@@ -169,10 +175,6 @@ class UserIntegrationTests {
     @Test
     void contextLoads() {
         assertEquals(4, 2 + 2);
-    }
-
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.model.ColumnsJournal;
 import com.glinka.wcn.model.dao.CategoryDao;
 import com.glinka.wcn.model.dao.ScientificJournalDao;
 import com.glinka.wcn.model.dto.ScientificJournal;
@@ -30,17 +31,20 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournal> findAll(String column) {
-        if (column.equals("eissn1") || column.equals("title1") || column.equals("points")) {
-            return scientificJournalRepository.findAll(Sort.by(Sort.Direction.ASC, column)).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
-        } else {
-            return scientificJournalRepository.findAll().stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
-        }
+    public List<ScientificJournal> findAll(String column, String direction) {
+        Sort sort = orderBy(column, direction);
+        return scientificJournalRepository.findAll(sort).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+//        if (column.equals("eissn1") || column.equals("title1") || column.equals("points")) {
+//            return scientificJournalRepository.findAll(Sort.by(Sort.Direction.ASC, column)).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+//        } else {
+//            return scientificJournalRepository.findAll().stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+//        }
     }
 
     @Override
-    public List<ScientificJournal> findAllById(List<Integer> ids, String column) {
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllById(ids);
+    public List<ScientificJournal> findAllById(List<Integer> ids, String column, String direction) {
+        Sort sort = orderBy(column, direction);
+        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIdIn(ids, sort);
         return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
@@ -53,53 +57,28 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournal> findAllByTitle(String word, String column) {
-        List<ScientificJournalDao> scientificJournalDaoList;
-        if (column.equals("eissn1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2ContainingOrderByEissn1(word, word);
-        } else if (column.equals("title1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2ContainingOrderByTitle1(word, word);
-        } else if (column.equals("points")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2ContainingOrderByPoints(word, word);
-        } else {
-            scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word);
-        }
+    public List<ScientificJournal> findAllByTitle(String word, String column, String direction) {
+        Sort sort = orderBy(column, direction);
+        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word, sort);
         return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByIssn(String word, String column) {
-        List<ScientificJournalDao> scientificJournalDaoList;
-        if (column.equals("eissn1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2ContainingOrderByEissn1(word, word);
-        } else if (column.equals("title1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2ContainingOrderByTitle1(word, word);
-        } else if (column.equals("points")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2ContainingOrderByPoints(word, word);
-        } else {
-            scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word);
-        }
+    public List<ScientificJournal> findAllByIssn(String word, String column, String direction) {
+        Sort sort = orderBy(column, direction);
+        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word, sort);
         return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByEissn(String word, String column) {
-        List<ScientificJournalDao> scientificJournalDaoList;
-        if (column.equals("eissn1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2ContainingOrderByEissn1(word, word);
-        } else if (column.equals("title1")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2ContainingOrderByTitle1(word, word);
-        } else if (column.equals("points")) {
-            scientificJournalDaoList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2ContainingOrderByPoints(word, word);
-        } else {
-            scientificJournalDaoList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word);
-        }
-
+    public List<ScientificJournal> findAllByEissn(String word, String column, String direction) {
+        Sort sort = orderBy(column, direction);
+        List<ScientificJournalDao> scientificJournalDaoList  = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word, sort);
         return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByCategory(Integer categoryId, String column) throws ResourceNotFoundException {
+    public List<ScientificJournal> findAllByCategory(Integer categoryId, String column, String direction) throws ResourceNotFoundException {
         List<ScientificJournalDao> scientificJournalDaoList;
         if (column.equals("eissn1") || column.equals("title1") || column.equals("points")) {
             scientificJournalDaoList = scientificJournalRepository.findAll(Sort.by(Sort.Direction.ASC, column));
@@ -126,6 +105,17 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     @Override
     public ScientificJournal save(ScientificJournal scientificJournal) {
         return scientificJournalMapper.mapToDto(scientificJournalRepository.saveAndFlush(scientificJournalMapper.mapToDao(scientificJournal)));
+    }
+
+    private Sort orderBy(String column, String direction){
+        for(ColumnsJournal c : ColumnsJournal.values()){
+            if (column.equals(c.getColumn())) {
+                if (direction.equals("desc"))
+                    return Sort.by(Sort.Direction.DESC, column);
+                return Sort.by(Sort.Direction.ASC, column);
+            }
+        }
+        return Sort.by(Sort.Direction.ASC, "id");
     }
 }
 
