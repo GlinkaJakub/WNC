@@ -4,10 +4,13 @@ import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.ColumnsJournal;
 import com.glinka.wcn.model.dao.CategoryDao;
 import com.glinka.wcn.model.dao.ScientificJournalDao;
+import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.repository.CategoryRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
+import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
+import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,22 +26,21 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     private final Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper;
     private final ScientificJournalRepository scientificJournalRepository;
     private final CategoryRepository categoryRepository;
+    private final GroupService groupService;
+    private final UserService userService;
 
-    public ScientificJournalServiceImpl(Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository) {
+    public ScientificJournalServiceImpl(Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository, GroupService groupService, UserService userService) {
         this.scientificJournalMapper = scientificJournalMapper;
         this.scientificJournalRepository = scientificJournalRepository;
         this.categoryRepository = categoryRepository;
+        this.groupService = groupService;
+        this.userService = userService;
     }
 
     @Override
     public List<ScientificJournal> findAll(String column, String direction) {
         Sort sort = orderBy(column, direction);
         return scientificJournalRepository.findAll(sort).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
-//        if (column.equals("eissn1") || column.equals("title1") || column.equals("points")) {
-//            return scientificJournalRepository.findAll(Sort.by(Sort.Direction.ASC, column)).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
-//        } else {
-//            return scientificJournalRepository.findAll().stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
-//        }
     }
 
     @Override
@@ -79,12 +81,8 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
 
     @Override
     public List<ScientificJournal> findAllByCategory(Integer categoryId, String column, String direction) throws ResourceNotFoundException {
-        List<ScientificJournalDao> scientificJournalDaoList;
-        if (column.equals("eissn1") || column.equals("title1") || column.equals("points")) {
-            scientificJournalDaoList = scientificJournalRepository.findAll(Sort.by(Sort.Direction.ASC, column));
-        } else {
-            scientificJournalDaoList = scientificJournalRepository.findAll();
-        }
+        Sort sort = orderBy(column, direction);
+        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAll(sort);
         CategoryDao categoryDao = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new ResourceNotFoundException("Category with id: " + categoryId + " not found.")
         );
@@ -95,6 +93,20 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
             }
         }
         return scientificJournalDaoByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ScientificJournal> findAllByUser(Integer userId, String column, String direction) {
+        return null;
+    }
+
+    @Override
+    public List<ScientificJournal> findAllByGroup(Integer groupId, String column, String direction) throws ResourceNotFoundException {
+        Sort sort = orderByForGroup(column, direction);
+//
+//        Group group = groupService.findById(groupId);
+        List<ScientificJournalDao> journals = scientificJournalRepository.findAllByGroup(groupId, sort);
+                return journals.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -116,6 +128,17 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
             }
         }
         return Sort.by(Sort.Direction.ASC, "id");
+    }
+
+    private Sort orderByForGroup(String column, String direction){
+        for(ColumnsJournal c : ColumnsJournal.values()){
+            if (column.equals(c.getColumn())) {
+                if (direction.equals("desc"))
+                    return Sort.by(Sort.Direction.DESC, "g.journals." + column);
+                return Sort.by(Sort.Direction.ASC, "g.journals." + column);
+            }
+        }
+        return Sort.by(Sort.Direction.ASC, "g.journals.id");
     }
 }
 

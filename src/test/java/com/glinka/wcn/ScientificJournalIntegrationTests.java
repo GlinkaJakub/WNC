@@ -3,7 +3,9 @@ package com.glinka.wcn;
 import com.glinka.wcn.model.dto.Category;
 import com.glinka.wcn.model.dto.ScientificJournal;
 import com.glinka.wcn.service.CategoryService;
+import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
+import com.glinka.wcn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -23,6 +25,10 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
     ScientificJournalService journalService;
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    GroupService groupService;
+    @Autowired
+    UserService userService;
 
     @Test
     public void testGetAllJournals(){
@@ -262,9 +268,99 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         assertEquals(journal1, response.getBody()[0]);
     }
 
-    // /findJournalsByGroup
 
     // findAllByCategory
+    @Test
+    public void testFindAllByCategory(){
+        int categoryId = 2;
+        String direction = "asc";
+        String column = "eissn1";
+
+        Category category1 = new Category(1, "category1");
+        Category category2 = new Category(2, "category2");
+        List<Category> categoryList1 = new ArrayList<>();
+        List<Category> categoryList2 = new ArrayList<>();
+        categoryList1.add(category1);
+        categoryList2.add(category2);
+        categoryService.save(category1);
+        categoryService.save(category2);
+
+        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList1);
+        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList2);
+        ScientificJournal journal1 = new ScientificJournal(5, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList2);
+        journalService.save(journal2);
+        journalService.save(journal3);
+        journalService.save(journal1);
+
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journal/findAllJournalsByCategory?categoryId={categoryId}&column={column}&direction={direction}"),
+                HttpMethod.GET,
+                entity,
+                ScientificJournal[].class,
+                categoryId,
+                column,
+                direction
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().length);
+        assertEquals(journal1, response.getBody()[0]);
+        assertEquals(journal3, response.getBody()[1]);
+    }
+
+    // /findJournalsByGroup
+//    @Test
+//    public void testFindAllByGroup() throws ResourceNotFoundException {
+//        int groupId = 2;
+//        String direction = "desc";
+//        String column = "issn1";
+//
+//        //user1
+//        User user1 = new User(1, "email@wp.pl", "password", "Jan", "Kowalski");
+//        //user2
+//        User user2 = new User(3, "email2@wp.pl", "password2", "Jerzy", "Nowak");
+//        userService.save(user1);
+//        userService.save(user2);
+//        Category category1 = new Category(5, "category1");
+//        Category category2 = new Category(6, "category2");
+//        List<Category> categoryList1 = new ArrayList<>();
+//        List<Category> categoryList2 = new ArrayList<>();
+//        categoryList1.add(category1);
+//        categoryList2.add(category2);
+//        categoryService.save(category1);
+//        categoryService.save(category2);
+//
+//        ScientificJournal journal2 = new ScientificJournal(7, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList1);
+//        ScientificJournal journal3 = new ScientificJournal(8, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList2);
+//        ScientificJournal journal1 = new ScientificJournal(9, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList2);
+//        journalService.save(journal2);
+//        journalService.save(journal3);
+//        journalService.save(journal1);
+//
+//        groupService.addJournal(7, 2);
+//        groupService.addJournal(8, 2);
+//        groupService.addJournal(9, 4);
+//
+//        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+//
+//        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
+//                createURLWithPort("/api/journal/findAllJournalsByGroup?groupId={groupId}&column={column}&direction={direction}"),
+//                HttpMethod.GET,
+//                entity,
+//                ScientificJournal[].class,
+//                groupId,
+//                column,
+//                direction
+//        );
+//
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(2, response.getBody().length);
+//        assertEquals(journal3, response.getBody()[0]);
+//        assertEquals(journal2, response.getBody()[1]);
+//    }
+
     // findAllByUser
 
 }

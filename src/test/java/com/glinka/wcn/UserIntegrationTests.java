@@ -21,8 +21,10 @@ class UserIntegrationTests extends BaseIntegrationTests {
 
     @Test
     public void testCreateUser() throws Exception {
-        HttpEntity<User> user = new HttpEntity<>(new User(1, "email@wp.pl", "password", "name1", "surname1"), headers);
+        User user1 = new User(1, "email@wp.pl", "password", "name1", "surname1");
+        HttpEntity<User> user = new HttpEntity<>(user1, headers);
         ResponseEntity<User> response = restTemplate.exchange(
+
                 createURLWithPort("/api/user/saveUser"),
                 HttpMethod.POST,
                 user,

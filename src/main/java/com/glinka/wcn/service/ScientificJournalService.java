@@ -17,14 +17,15 @@ public interface ScientificJournalService {
     List<ScientificJournal> findAllByIssn(String word, String column, String direction);
     List<ScientificJournal> findAllByEissn(String word, String column, String direction);
     List<ScientificJournal> findAllByCategory(Integer categoryId, String column, String direction) throws ResourceNotFoundException;
+    List<ScientificJournal> findAllByUser(Integer userId, String column, String direction);
+    List<ScientificJournal> findAllByGroup(Integer groupId, String column, String direction) throws ResourceNotFoundException;
     //   Remove journal
     void delete(Integer id) throws ResourceNotFoundException;
     //   Add new journals
-    ScientificJournal save(ScientificJournal scientificJournal);
 
+    ScientificJournal save(ScientificJournal scientificJournal);
     //TODO
     // find all by category
     // Find journal by user
-//    List<ScientificJournal> findAllByUser(User user);
 //    List<ScientificJournalDao> findAllDaoById(List<Integer> ids);
 }

@@ -8,6 +8,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,12 @@ public class RestGroupController {
     }
 
     @GetMapping("/allGroup")
-    public String findAllGroup(){
+    public List<Group> findAllGroup(){
         List<Group> data = groupService.findAll();
         if (data == null || data.isEmpty()){
-            return "Not found data";
+            return Collections.emptyList();
         }
-        return data.toString();
+        return data;
     }
 
     @PostMapping("/saveGroup")

@@ -80,4 +80,18 @@ public class RestScientificJournalController {
         return groupService.findJournalsByGroup(groupId);
     }
 
+    @GetMapping("/findAllJournalsByCategory")
+    public List<ScientificJournal> findAllJournalSByCategory(@RequestParam("categoryId") Integer categoryId, @RequestParam("column") String column, @RequestParam("direction") String direction) throws Exception{
+        return scientificJournalService.findAllByCategory(categoryId, column, direction);
+    }
+
+    @GetMapping("/findAllJournalByUser")
+    public List<ScientificJournal> findAllJournalsByUser(@RequestParam("userId") Integer userId, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByUser(userId, column, direction);
+    }
+
+    @GetMapping("/findAllJournalsByGroup")
+    public List<ScientificJournal> findAllJournalsByGroup(@RequestParam("groupId") Integer groupId, @RequestParam("column") String column, @RequestParam("direction") String direction) throws ResourceNotFoundException {
+        return scientificJournalService.findAllByGroup(groupId, column, direction);
+    }
 }
