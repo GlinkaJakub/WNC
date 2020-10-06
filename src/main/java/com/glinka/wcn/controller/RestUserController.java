@@ -8,6 +8,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -37,12 +38,13 @@ public class RestUserController {
     }
 
     @GetMapping("/allUsers")
-    public String findAllUsers(){
+    public List<User> findAllUsers(){
         List<User> data = userService.findAll();
         if (data == null || data.isEmpty()){
-            return "Not found data";
+            return Collections.emptyList();
         }
-        return data.toString();
+        return data;
+        //TODO("change response from Srting to List")
     }
 
     @GetMapping("/findUserById")

@@ -57,8 +57,8 @@ public class RestAppController {
     //---FindAll--------------------------------------------------------------------------------------------------
 
     @GetMapping("/allScientificJournal")
-    public String findAllScientificJournal(){
-        List<ScientificJournal> data = scientificJournalService.findAll();
+    public String findAllScientificJournal(@RequestParam("sort") String sort, @RequestParam("direction") String direction, @RequestParam("column") String column){
+        List<ScientificJournal> data = scientificJournalService.findAll(column, direction);
         if(data == null || data.isEmpty()){
             return "Not found data";
         }
@@ -126,23 +126,23 @@ public class RestAppController {
     }
 
     @GetMapping("/findAllJournalsByIds")
-    public List<ScientificJournal> findScientificJournalsByIds(@RequestParam("ids") List<Integer> ids){
-        return scientificJournalService.findAllById(ids);
+    public List<ScientificJournal> findScientificJournalsByIds(@RequestParam("ids") List<Integer> ids, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllById(ids, column, direction);
     }
 
     @GetMapping("/findAllJournalsByTitle")
-    public List<ScientificJournal> findScientificJournalsByTitle(@RequestParam("title") String title){
-        return scientificJournalService.findAllByTitle(title);
+    public List<ScientificJournal> findScientificJournalsByTitle(@RequestParam("title") String title, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByTitle(title, column, direction);
     }
 
     @GetMapping("/findAllJournalsByIssn")
-    public List<ScientificJournal> findScientificJournalsByIssn(@RequestParam("issn") String issn){
-        return scientificJournalService.findAllByIssn(issn);
+    public List<ScientificJournal> findScientificJournalsByIssn(@RequestParam("issn") String issn, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByIssn(issn, column, direction);
     }
 
     @GetMapping("/findAllJournalsByEissn")
-    public List<ScientificJournal> findScientificJournalsByEissn(@RequestParam("eissn") String eissn){
-        return scientificJournalService.findAllByEissn(eissn);
+    public List<ScientificJournal> findScientificJournalsByEissn(@RequestParam("eissn") String eissn, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByEissn(eissn, column, direction);
     }
 
     @GetMapping("/findUserById")

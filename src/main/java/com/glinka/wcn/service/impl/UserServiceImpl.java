@@ -56,6 +56,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Integer id) throws ResourceNotFoundException{
+        List<Integer> idsGroups = groupService.findAllByUser(id).stream().map(i -> i.getId()).collect(Collectors.toList());
+        idsGroups.stream().forEach(idGroup -> {
+            try {
+                groupService.removeUser(id, idGroup);
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+//        groupService.removeUser(id, idsGroups);
         userRepository.deleteById(id);
     }
 

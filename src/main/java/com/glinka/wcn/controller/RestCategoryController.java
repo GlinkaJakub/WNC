@@ -8,6 +8,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,12 @@ public class RestCategoryController {
     }
 
     @GetMapping("/allCategory")
-    public String findAllCategory(){
+    public List<Category> findAllCategory(){
         List<Category> data = categoryService.findAll();
         if (data == null || data.isEmpty()){
-            return "Not found data";
+            return Collections.emptyList();
         }
-        return data.toString();
+        return data;
     }
 
     @PostMapping("/saveCategory")

@@ -3,7 +3,6 @@ package com.glinka.wcn.service;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
-import com.glinka.wcn.model.dto.User;
 
 import java.util.List;
 

@@ -8,6 +8,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,12 +28,12 @@ public class RestScientificJournalController {
     }
 
     @GetMapping("/allScientificJournal")
-    public String findAllScientificJournal(){
-        List<ScientificJournal> data = scientificJournalService.findAll();
+    public List<ScientificJournal> findAllScientificJournal(@RequestParam("column") String column, @RequestParam("direction") String direction){
+        List<ScientificJournal> data = scientificJournalService.findAll(column, direction);
         if(data == null || data.isEmpty()){
-            return "Not found data";
+            return Collections.emptyList();
         }
-        return data.toString();
+        return data;
     }
 
     @PostMapping("/saveScientificJournal")
@@ -55,23 +56,23 @@ public class RestScientificJournalController {
     }
 
     @GetMapping("/findAllJournalsByIds")
-    public List<ScientificJournal> findScientificJournalsByIds(@RequestParam("ids") List<Integer> ids){
-        return scientificJournalService.findAllById(ids);
+    public List<ScientificJournal> findScientificJournalsByIds(@RequestParam("ids") List<Integer> ids, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllById(ids, column, direction);
     }
 
     @GetMapping("/findAllJournalsByTitle")
-    public List<ScientificJournal> findScientificJournalsByTitle(@RequestParam("title") String title){
-        return scientificJournalService.findAllByTitle(title);
+    public List<ScientificJournal> findScientificJournalsByTitle(@RequestParam("title") String title, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByTitle(title, column, direction);
     }
 
     @GetMapping("/findAllJournalsByIssn")
-    public List<ScientificJournal> findScientificJournalsByIssn(@RequestParam("issn") String issn){
-        return scientificJournalService.findAllByIssn(issn);
+    public List<ScientificJournal> findScientificJournalsByIssn(@RequestParam("issn") String issn, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByIssn(issn, column, direction);
     }
 
     @GetMapping("/findAllJournalsByEissn")
-    public List<ScientificJournal> findScientificJournalsByEissn(@RequestParam("eissn") String eissn){
-        return scientificJournalService.findAllByEissn(eissn);
+    public List<ScientificJournal> findScientificJournalsByEissn(@RequestParam("eissn") String eissn, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByEissn(eissn, column, direction);
     }
 
     @GetMapping("/findJournalsByGroup")
@@ -79,4 +80,18 @@ public class RestScientificJournalController {
         return groupService.findJournalsByGroup(groupId);
     }
 
+    @GetMapping("/findAllJournalsByCategory")
+    public List<ScientificJournal> findAllJournalSByCategory(@RequestParam("categoryId") Integer categoryId, @RequestParam("column") String column, @RequestParam("direction") String direction) throws Exception{
+        return scientificJournalService.findAllByCategory(categoryId, column, direction);
+    }
+
+    @GetMapping("/findAllJournalByUser")
+    public List<ScientificJournal> findAllJournalsByUser(@RequestParam("userId") Integer userId, @RequestParam("column") String column, @RequestParam("direction") String direction){
+        return scientificJournalService.findAllByUser(userId, column, direction);
+    }
+
+    @GetMapping("/findAllJournalsByGroup")
+    public List<ScientificJournal> findAllJournalsByGroup(@RequestParam("groupId") Integer groupId, @RequestParam("column") String column, @RequestParam("direction") String direction) throws ResourceNotFoundException {
+        return scientificJournalService.findAllByGroup(groupId, column, direction);
+    }
 }

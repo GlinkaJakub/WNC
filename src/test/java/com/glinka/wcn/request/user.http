@@ -4,7 +4,7 @@ POST http://localhost:8282/saveUser
 Content-Type: application/json
 
 {
-  "id": 3,
+  "id": 1,
   "name": "Jakub",
   "surname": "Glinka",
   "email": "jakub@mail.com",
@@ -22,7 +22,7 @@ Accept: application/json
 
 ### delete
 
-GET http://localhost:8282/deleteUser?id=2
+GET http://localhost:8282/deleteUser?id=1
 Accept: application/json
 
 ### findAllById

@@ -6,7 +6,6 @@ import com.glinka.wcn.model.dao.ScientificJournalDao;
 import com.glinka.wcn.model.dao.UserDao;
 import com.glinka.wcn.model.dto.Group;
 import com.glinka.wcn.model.dto.ScientificJournal;
-import com.glinka.wcn.model.dto.User;
 import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.repository.UserRepository;
@@ -38,6 +37,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> findAll() {
+        List<GroupDao> groupDaos = groupRepository.findAll();
         return groupRepository.findAll().stream().map(groupMapper::mapToDto).collect(Collectors.toList());
     }
 
