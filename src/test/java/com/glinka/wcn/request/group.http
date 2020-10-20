@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "id": 1,
-  "name": "group1",
-  "users": [
+  "name": "groupDto1",
+  "userDtos": [
     {
       "id": 1,
       "name": "Jakub",
@@ -27,7 +27,7 @@ Content-Type: application/json
       "categories": [
         {
           "id": 2,
-          "name": "category3"
+          "name": "categoryDto3"
         }
       ]
     }

@@ -1,58 +1,58 @@
 package com.glinka.wcn.controller;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.Category;
+import com.glinka.wcn.model.dto.CategoryDto;
 import com.glinka.wcn.service.CategoryService;
-import com.glinka.wcn.service.GroupService;
-import com.glinka.wcn.service.ScientificJournalService;
-import com.glinka.wcn.service.UserService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api")
 public class RestCategoryController {
 
-    private final ScientificJournalService scientificJournalService;
-    private final UserService userService;
-    private final GroupService groupService;
     private final CategoryService categoryService;
 
-    public RestCategoryController(ScientificJournalService scientificJournalService, UserService userService, GroupService groupService, CategoryService categoryService) {
-        this.scientificJournalService = scientificJournalService;
-        this.userService = userService;
-        this.groupService = groupService;
+    @Autowired
+    public RestCategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/allCategory")
-    public List<Category> findAllCategory(){
-        List<Category> data = categoryService.findAll();
+    @GetMapping("/categories")
+    public List<CategoryDto> findAllCategory(){
+        List<CategoryDto> data = categoryService.findAll();
         if (data == null || data.isEmpty()){
             return Collections.emptyList();
         }
         return data;
     }
 
-    @PostMapping("/saveCategory")
-    public Category saveCategory(@RequestBody Category category){
-        return categoryService.save(category);
+    @PostMapping("/categories")
+    public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto){
+        return categoryService.save(categoryDto);
     }
 
-    @GetMapping("/deleteCategory")
-    public void deleteCategory(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
         categoryService.delete(id);
     }
 
-    @GetMapping("/findAllCategoryByIds")
-    public List<Category> findAllCategoryByIds(@RequestParam List<Integer> ids){
+    @GetMapping("/categories/ids")
+    public List<CategoryDto> findAllCategoryByIds(@RequestParam List<Long> ids){
         return categoryService.findAllById(ids);
     }
 
-    @GetMapping("/findCategoryById")
-    public Category findCategoryById(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+    @GetMapping("/categories/{id}")
+    public CategoryDto findCategoryById(@PathVariable("id") Long id) throws ResourceNotFoundException {
         return categoryService.findById(id);
     }
 

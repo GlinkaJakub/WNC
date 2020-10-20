@@ -1,7 +1,7 @@
 package com.glinka.wcn.repository;
 
-import com.glinka.wcn.model.dao.GroupDao;
+import com.glinka.wcn.model.dao.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface GroupRepository extends JpaRepository<GroupDao, Integer> {
+public interface GroupRepository extends JpaRepository<Group, Long> {
 }

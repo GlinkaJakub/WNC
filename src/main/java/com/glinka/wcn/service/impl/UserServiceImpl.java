@@ -1,14 +1,15 @@
 package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dao.UserDao;
-import com.glinka.wcn.model.dto.Group;
-import com.glinka.wcn.model.dto.ScientificJournal;
-import com.glinka.wcn.model.dto.User;
+import com.glinka.wcn.model.dao.User;
+import com.glinka.wcn.model.dto.GroupDto;
+import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,45 +20,46 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final Mapper<User, UserDao> userMapper;
+    private final Mapper<UserDto, User> userMapper;
     private final UserRepository userRepository;
 
     private final GroupService groupService;
 
-    public UserServiceImpl(Mapper<User, UserDao> userMapper, UserRepository userRepository, GroupService groupService) {
+    @Autowired
+    public UserServiceImpl(Mapper<UserDto, User> userMapper, UserRepository userRepository, GroupService groupService) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.groupService = groupService;
     }
 
     @Override
-    public User save(User user){
-        UserDao newUser = userRepository.saveAndFlush(userMapper.mapToDao(user));
-        List<User> users = new ArrayList<>();
-        List<ScientificJournal> scientificJournals = new ArrayList<>();
-        users.add(userMapper.mapToDto(newUser));
-        Group newGroup = new Group(1, newUser.getName() + " group", users, scientificJournals);
-        groupService.save(newGroup);
+    public UserDto save(UserDto userDto){
+        User newUser = userRepository.saveAndFlush(userMapper.mapToDao(userDto));
+        List<UserDto> userDtos = new ArrayList<>();
+        List<ScientificJournalDto> scientificJournalDtos = new ArrayList<>();
+        userDtos.add(userMapper.mapToDto(newUser));
+        GroupDto newGroupDto = new GroupDto(0, newUser.getName() + " group", userDtos, scientificJournalDtos);
+        groupService.save(newGroupDto);
         return userMapper.mapToDto(newUser);
     }
 
     @Override
-    public User findById(Integer id) throws ResourceNotFoundException {
-        Optional<UserDao> userDao = userRepository.findById(id);
+    public UserDto findById(Long id) throws ResourceNotFoundException {
+        Optional<User> userDao = userRepository.findById(id);
         return userMapper.mapToDto(userDao.orElseThrow(
                 () -> new ResourceNotFoundException("User with id :" + id + " not found")
         ));
     }
 
     @Override
-    public List<User> findAll(){
+    public List<UserDto> findAll(){
         return userRepository.findAll().stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public void delete(Integer id) throws ResourceNotFoundException{
-        List<Integer> idsGroups = groupService.findAllByUser(id).stream().map(i -> i.getId()).collect(Collectors.toList());
-        idsGroups.stream().forEach(idGroup -> {
+    public void delete(Long id) throws ResourceNotFoundException{
+        List<Long> idsGroups = groupService.findAllByUser(id).stream().map(GroupDto::getId).collect(Collectors.toList());
+        idsGroups.forEach(idGroup -> {
             try {
                 groupService.removeUser(id, idGroup);
             } catch (ResourceNotFoundException e) {
@@ -69,22 +71,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllById(List<Integer> ids){
-        List<UserDao> userDaoList = userRepository.findAllById(ids);
-        return userDaoList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
+    public List<UserDto> findAllById(List<Long> ids){
+        List<User> userList = userRepository.findAllById(ids);
+        return userList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<User> findAllByNameOrSurname(String name) {
-        List<UserDao> userDaoList = userRepository.findAllByName(name);
-        userDaoList.addAll(userRepository.findAllBySurname(name));
-        return userDaoList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
+    public List<UserDto> findAllByNameOrSurname(String name) {
+        List<User> userList = userRepository.findAllByName(name);
+        userList.addAll(userRepository.findAllBySurname(name));
+        return userList.stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public User findByEmail(String email) {
-        UserDao userDao = userRepository.findUserDaoByEmail(email);
-        return userMapper.mapToDto(userDao);
+    public UserDto findByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+        return userMapper.mapToDto(user);
     }
 
 }

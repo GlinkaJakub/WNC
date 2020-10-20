@@ -15,19 +15,20 @@ import java.util.List;
 @Builder
 @Data
 @Entity
-public class GroupDao {
+@Table(name = "groups")
+public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long groupId;
 
     private String name;
     //TO DO
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<UserDao> users;
+    private List<User> users;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<ScientificJournalDao> journalDaos;
+    private List<Journal> journals;
 }

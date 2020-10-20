@@ -1,18 +1,18 @@
 package com.glinka.wcn.service;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.User;
+import com.glinka.wcn.model.dto.UserDto;
 
 import java.util.List;
 
 
 public interface UserService {
 
-    List<User> findAll();
-    List<User> findAllById(List<Integer> ids);
-    List<User> findAllByNameOrSurname(String name);
-    User findById(Integer id) throws ResourceNotFoundException;
-    User findByEmail(String email);
-    User save(User user);
-    void delete(Integer id) throws ResourceNotFoundException;
+    List<UserDto> findAll();
+    List<UserDto> findAllById(List<Long> ids);
+    List<UserDto> findAllByNameOrSurname(String name);
+    UserDto findById(Long id) throws ResourceNotFoundException;
+    UserDto findByEmail(String email);
+    UserDto save(UserDto userDto);
+    void delete(Long id) throws ResourceNotFoundException;
 }

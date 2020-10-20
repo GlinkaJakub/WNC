@@ -1,32 +1,32 @@
 package com.glinka.wcn.service.mapper;
 
-import com.glinka.wcn.model.dao.UserDao;
-import com.glinka.wcn.model.dto.User;
+import com.glinka.wcn.model.dao.User;
+import com.glinka.wcn.model.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserMapper implements Mapper<User, UserDao> {
+public class UserMapper implements Mapper<UserDto, User> {
 
     @Override
-    public User mapToDto(UserDao userDao) {
-        return User.builder()
-                .id(userDao.getId())
-                .name(userDao.getName())
-                .surname(userDao.getSurname())
-                .email(userDao.getEmail())
-                .password(userDao.getPassword())
-                .build();
-    }
-
-    @Override
-    public UserDao mapToDao(User user) {
-        return UserDao.builder()
-                .id(user.getId())
+    public UserDto mapToDto(User user) {
+        return UserDto.builder()
+                .id(user.getUserId())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .build();
+    }
+
+    @Override
+    public User mapToDao(UserDto userDto) {
+        return User.builder()
+                .userId(userDto.getId())
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
                 .build();
     }
 }

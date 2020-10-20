@@ -1,49 +1,51 @@
 package com.glinka.wcn.service.mapper;
 
-import com.glinka.wcn.model.dao.CategoryDao;
-import com.glinka.wcn.model.dao.ScientificJournalDao;
-import com.glinka.wcn.model.dto.Category;
-import com.glinka.wcn.model.dto.ScientificJournal;
+import com.glinka.wcn.model.dao.Category;
+import com.glinka.wcn.model.dao.Journal;
+import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.model.dto.ScientificJournalDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 @Service
-public class ScientificJournalMapper implements Mapper<ScientificJournal, ScientificJournalDao> {
+public class ScientificJournalMapper implements Mapper<ScientificJournalDto, Journal> {
 
-    private final Mapper<Category, CategoryDao> categoryMapper;
+    private final Mapper<CategoryDto, Category> categoryMapper;
 
-    public ScientificJournalMapper(Mapper<Category, CategoryDao> categoryMapper) {
+    @Autowired
+    public ScientificJournalMapper(Mapper<CategoryDto, Category> categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
 
     @Override
-    public ScientificJournal mapToDto(ScientificJournalDao scientificJournal) {
-        return ScientificJournal.builder()
-                .id(scientificJournal.getId())
-                .title1(scientificJournal.getTitle1())
-                .issn1(scientificJournal.getIssn1())
-                .eissn1(scientificJournal.getEissn1())
-                .title2(scientificJournal.getTitle2())
-                .issn2(scientificJournal.getIssn2())
-                .eissn2(scientificJournal.getEissn2())
-                .points(scientificJournal.getPoints())
-                .categories(scientificJournal.getCategories().stream().map(categoryMapper::mapToDto).collect(Collectors.toList()))
+    public ScientificJournalDto mapToDto(Journal journal) {
+        return ScientificJournalDto.builder()
+                .id(journal.getJournalId())
+                .title1(journal.getTitle1())
+                .issn1(journal.getIssn1())
+                .eissn1(journal.getEissn1())
+                .title2(journal.getTitle2())
+                .issn2(journal.getIssn2())
+                .eissn2(journal.getEissn2())
+                .points(journal.getPoints())
+                .categories(journal.getCategories().stream().map(categoryMapper::mapToDto).collect(Collectors.toList()))
                 .build();
     }
 
     @Override
-    public ScientificJournalDao mapToDao(ScientificJournal scientificJournalDao) {
-        return ScientificJournalDao.builder()
-                .id(scientificJournalDao.getId())
-                .title1(scientificJournalDao.getTitle1())
-                .issn1(scientificJournalDao.getIssn1())
-                .eissn1(scientificJournalDao.getEissn1())
-                .title2(scientificJournalDao.getTitle2())
-                .issn2(scientificJournalDao.getIssn2())
-                .eissn2(scientificJournalDao.getEissn2())
-                .points(scientificJournalDao.getPoints())
-                .categories(scientificJournalDao.getCategories().stream().map(categoryMapper::mapToDao).collect(Collectors.toList()))
+    public Journal mapToDao(ScientificJournalDto scientificJournalDtoDao) {
+        return Journal.builder()
+                .journalId(scientificJournalDtoDao.getId())
+                .title1(scientificJournalDtoDao.getTitle1())
+                .issn1(scientificJournalDtoDao.getIssn1())
+                .eissn1(scientificJournalDtoDao.getEissn1())
+                .title2(scientificJournalDtoDao.getTitle2())
+                .issn2(scientificJournalDtoDao.getIssn2())
+                .eissn2(scientificJournalDtoDao.getEissn2())
+                .points(scientificJournalDtoDao.getPoints())
+                .categories(scientificJournalDtoDao.getCategories().stream().map(categoryMapper::mapToDao).collect(Collectors.toList()))
                 .build();
     }
 }

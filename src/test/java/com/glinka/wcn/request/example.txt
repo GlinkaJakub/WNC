@@ -1,18 +1,18 @@
-category:
+categoryDto:
 
 {
-  "name": "category1"
+  "name": "categoryDto1"
 }
 
 {
-  "name": "category2"
+  "name": "categoryDto2"
 }
 
 {
-  "name": "category"
+  "name": "categoryDto"
 }
 
-user:
+userDto:
 
 {
   "email": "jan@wp.pl",
@@ -117,6 +117,6 @@ journal:
   "title2": "tyt25"
 }
 
-group:
+groupDto:
 
 dodaje automatycznie

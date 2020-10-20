@@ -11,11 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class Group {
+public class GroupDto {
 
-    private int id;
+    private long id;
     private String name;
-    private List<User> users;
-    private List<ScientificJournal> journals;
+    private List<UserDto> userDtos;
+    private List<ScientificJournalDto> journals;
 
 }

@@ -1,75 +1,72 @@
 package com.glinka.wcn.controller;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.Group;
-import com.glinka.wcn.service.CategoryService;
+import com.glinka.wcn.model.dto.GroupDto;
 import com.glinka.wcn.service.GroupService;
-import com.glinka.wcn.service.ScientificJournalService;
-import com.glinka.wcn.service.UserService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/group")
+@RequestMapping("/api")
 public class RestGroupController {
 
-    private final ScientificJournalService scientificJournalService;
-    private final UserService userService;
     private final GroupService groupService;
-    private final CategoryService categoryService;
 
-    public RestGroupController(ScientificJournalService scientificJournalService, UserService userService, GroupService groupService, CategoryService categoryService) {
-        this.scientificJournalService = scientificJournalService;
-        this.userService = userService;
+    @Autowired
+    public RestGroupController(GroupService groupService) {
         this.groupService = groupService;
-        this.categoryService = categoryService;
     }
 
-    @GetMapping("/allGroup")
-    public List<Group> findAllGroup(){
-        List<Group> data = groupService.findAll();
+    @GetMapping("/groups")
+    public List<GroupDto> findAllGroup(){
+        List<GroupDto> data = groupService.findAll();
         if (data == null || data.isEmpty()){
             return Collections.emptyList();
         }
         return data;
     }
 
-    @PostMapping("/saveGroup")
-    public Group saveGroup(@RequestBody Group group){
-        return groupService.save(group);
+    @PostMapping("/groups")
+    public GroupDto saveGroup(@RequestBody GroupDto groupDto){
+        return groupService.save(groupDto);
     }
 
-    @GetMapping("/findGroupsByUser")
-    public List<Group> findAllGroupsByUser(@RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+    @GetMapping("/users/{userId}/groups")
+    public List<GroupDto> findAllGroupsByUser(@PathVariable Long userId) throws ResourceNotFoundException {
         return groupService.findAllByUser(userId);
     }
 
-    @GetMapping("/findGroupById")
-    public Group findGroupById(@RequestParam("id") Integer id) throws ResourceNotFoundException {
+    @GetMapping("/groups/{id}")
+    public GroupDto findGroupById(@PathVariable Long id) throws ResourceNotFoundException {
         return groupService.findById(id);
     }
 
-    //---GroupManipulateList----------------------------------------------------------------------------------------
-
-    @GetMapping("/addJournalToGroup")
-    public Group addJournalToGroup(@RequestParam("groupId") Integer groupId, @RequestParam("journalId") Integer journalId) throws ResourceNotFoundException {
+    @GetMapping("/groups/{groupId}/journals/{journalId}")
+    public GroupDto addJournalToGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
         return groupService.addJournal(journalId, groupId);
     }
 
-    @GetMapping("/removeJournalFromGroup")
-    public void removeJournalFromGroup(@RequestParam("groupId") Integer groupId, @RequestParam("journalId") Integer journalId) throws ResourceNotFoundException {
+    @DeleteMapping("/groups/{groupId}/journals/{journalId}")
+    public void removeJournalFromGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
         groupService.removeJournal(journalId, groupId);
     }
 
-    @GetMapping("/addUserToGroup")
-    public Group addUserToGroup(@RequestParam("groupId") Integer groupId, @RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+    @GetMapping("/groups/{groupId}/users/{userId}")
+    public GroupDto addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
         return groupService.addUser(userId, groupId);
     }
 
-    @GetMapping("/removeUserFromGroup")
-    public void removeUserFromGroup(@RequestParam("groupId") Integer groupId, @RequestParam("userId") Integer userId) throws ResourceNotFoundException {
+    @DeleteMapping("/groups/{groupId}/users/{userId}")
+    public void removeUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
         groupService.removeUser(userId, groupId);
     }
 }

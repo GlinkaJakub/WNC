@@ -32,12 +32,12 @@ Content-Type: application/json
 
 ### findAllByNameOrSurname
 
-GET http://localhost:8282/findUserByName?user=Glinka
+GET http://localhost:8282/findUserByName?userDto=Glinka
 Accept: application/json
 
 ### findByEmail
 
-GET http://localhost:8282/findUserByEmail?user=jakub1@mail.com
+GET http://localhost:8282/findUserByEmail?userDto=jakub1@mail.com
 Accept: application/json
 
 ###

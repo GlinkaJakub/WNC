@@ -1,6 +1,6 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dto.User;
+import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +14,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UserIntegrationTests extends BaseIntegrationTests {
+class UserDtoIntegrationTests extends BaseIntegrationTests {
 
     @Autowired
     UserService userService;
 
     @Test
     public void testCreateUser() throws Exception {
-        User user1 = new User(1, "email@wp.pl", "password", "name1", "surname1");
-        HttpEntity<User> user = new HttpEntity<>(user1, headers);
-        ResponseEntity<User> response = restTemplate.exchange(
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
+        HttpEntity<UserDto> user = new HttpEntity<>(userDto1, headers);
+        ResponseEntity<UserDto> response = restTemplate.exchange(
 
-                createURLWithPort("/api/user/saveUser"),
+                createURLWithPort("/api/users"),
                 HttpMethod.POST,
                 user,
-                User.class);
+                UserDto.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         assertEquals("email@wp.pl", response.getBody().getEmail());
@@ -40,15 +40,15 @@ class UserIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testGetUsers() throws Exception {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        User user1 = new User(1, "email@wp.pl", "password", "name1", "surname1");
-        User user2 = new User(2, "email2@wp.pl", "password2", "name2", "surname2");
-        userService.save(user1);
-        userService.save(user2);
-        ResponseEntity<User[]> response = restTemplate.exchange(
-                createURLWithPort("/api/user/allUsers"),
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2");
+        userService.save(userDto1);
+        userService.save(userDto2);
+        ResponseEntity<UserDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/users"),
                 HttpMethod.GET,
                 entity,
-                User[].class);
+                UserDto[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(2, response.getBody().length);
     }
@@ -58,13 +58,13 @@ class UserIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         int id = 1;
-        userService.save(new User(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
         //when
-        ResponseEntity<User> response = restTemplate.exchange(
-                createURLWithPort("/api/user/findUserById?id={id}"),
+        ResponseEntity<UserDto> response = restTemplate.exchange(
+                createURLWithPort("/api/users/{id}"),
                 HttpMethod.GET,
                 entity,
-                User.class,
+                UserDto.class,
                 id);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -80,14 +80,14 @@ class UserIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         int id = 1;
-        userService.save(new User(1, "email@wp.pl", "password", "name1", "surname1"));
-        userService.save(new User(2, "email2@wp.pl", "password2", "name2", "surname2"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2"));
         //when
-        ResponseEntity<User> response = restTemplate.exchange(
-                createURLWithPort("/api/user/deleteUser?id={id}"),
-                HttpMethod.GET,
+        ResponseEntity<UserDto> response = restTemplate.exchange(
+                createURLWithPort("/api/users/{id}"),
+                HttpMethod.DELETE,
                 entity,
-                User.class,
+                UserDto.class,
                 id);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -99,13 +99,13 @@ class UserIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         String name = "name1";
-        userService.save(new User(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
         //when
-        ResponseEntity<User[]> response = restTemplate.exchange(
-                createURLWithPort("/api/user/findUserByName?user={name}"),
+        ResponseEntity<UserDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/users/names/{name}"),
                 HttpMethod.GET,
                 entity,
-                User[].class,
+                UserDto[].class,
                 name);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -121,13 +121,13 @@ class UserIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         String email = "email@wp.pl";
-        userService.save(new User(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
         //when
-        ResponseEntity<User> response = restTemplate.exchange(
-                createURLWithPort("/api/user/findUserByEmail?user={email}"),
+        ResponseEntity<UserDto> response = restTemplate.exchange(
+                createURLWithPort("/api/users/emails/{email}"),
                 HttpMethod.GET,
                 entity,
-                User.class,
+                UserDto.class,
                 email);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -146,26 +146,26 @@ class UserIntegrationTests extends BaseIntegrationTests {
         ids.add(1);
         ids.add(3);
         String idsToString = idsToString(ids);
-        User user1 = new User(1, "email@wp.pl", "password", "name1", "surname1");
-        User user2 = new User(2, "email2@wp.pl", "password2", "name2", "surname2");
-        User user3 = new User(3, "email3@wp.pl", "password2", "name2", "surname2");
-        User user4 = new User(4, "email4@wp.pl", "password2", "name2", "surname2");
-        userService.save(user1);
-        userService.save(user2);
-        userService.save(user3);
-        userService.save(user4);
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2");
+        UserDto userDto3 = new UserDto(3, "email3@wp.pl", "password2", "name2", "surname2");
+        UserDto userDto4 = new UserDto(4, "email4@wp.pl", "password2", "name2", "surname2");
+        userService.save(userDto1);
+        userService.save(userDto2);
+        userService.save(userDto3);
+        userService.save(userDto4);
 
         //when
-        ResponseEntity<User[]> response = restTemplate.exchange(
-                createURLWithPort("/api/user/findAllUsersByIds?ids={idsToString}"),
+        ResponseEntity<UserDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/users/ids?ids={idsToString}"),
                 HttpMethod.GET,
                 entity,
-                User[].class,
+                UserDto[].class,
                 idsToString);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(2, response.getBody().length);
-        assertEquals(user1, response.getBody()[0]);
+        assertEquals(userDto1, response.getBody()[0]);
 //        assertEquals(user2, response.getBody()[1]);
         assertEquals(1, response.getBody()[0].getId());
         assertEquals("email@wp.pl", response.getBody()[0].getEmail());

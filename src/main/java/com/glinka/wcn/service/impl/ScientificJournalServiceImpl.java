@@ -2,16 +2,16 @@ package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.ColumnsJournal;
-import com.glinka.wcn.model.dao.CategoryDao;
-import com.glinka.wcn.model.dao.ScientificJournalDao;
-import com.glinka.wcn.model.dto.Group;
-import com.glinka.wcn.model.dto.ScientificJournal;
+import com.glinka.wcn.model.dao.Category;
+import com.glinka.wcn.model.dao.Journal;
+import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.repository.CategoryRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +23,14 @@ import java.util.stream.Collectors;
 @Service
 public class ScientificJournalServiceImpl implements ScientificJournalService {
 
-    private final Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper;
+    private final Mapper<ScientificJournalDto, Journal> scientificJournalMapper;
     private final ScientificJournalRepository scientificJournalRepository;
     private final CategoryRepository categoryRepository;
     private final GroupService groupService;
     private final UserService userService;
 
-    public ScientificJournalServiceImpl(Mapper<ScientificJournal, ScientificJournalDao> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository, GroupService groupService, UserService userService) {
+    @Autowired
+    public ScientificJournalServiceImpl(Mapper<ScientificJournalDto, Journal> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository, GroupService groupService, UserService userService) {
         this.scientificJournalMapper = scientificJournalMapper;
         this.scientificJournalRepository = scientificJournalRepository;
         this.categoryRepository = categoryRepository;
@@ -38,85 +39,85 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournal> findAll(String column, String direction) {
+    public List<ScientificJournalDto> findAll(String column, String direction) {
         Sort sort = orderBy(column, direction);
         return scientificJournalRepository.findAll(sort).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllById(List<Integer> ids, String column, String direction) {
+    public List<ScientificJournalDto> findAllById(List<Long> ids, String column, String direction) {
         Sort sort = orderBy(column, direction);
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIdIn(ids, sort);
-        return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        List<Journal> journalList = scientificJournalRepository.findAllByJournalIdIn(ids, sort);
+        return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public ScientificJournal findById(Integer id) throws ResourceNotFoundException {
-        Optional<ScientificJournalDao> scientificJournalDao = scientificJournalRepository.findById(id);
+    public ScientificJournalDto findById(Long id) throws ResourceNotFoundException {
+        Optional<Journal> scientificJournalDao = scientificJournalRepository.findById(id);
         return scientificJournalMapper.mapToDto(scientificJournalDao.orElseThrow(
                 () -> new ResourceNotFoundException("Scientific journal with id: " + id + " not found.")
         ));
     }
 
     @Override
-    public List<ScientificJournal> findAllByTitle(String word, String column, String direction) {
+    public List<ScientificJournalDto> findAllByTitle(String word, String column, String direction) {
         Sort sort = orderBy(column, direction);
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word, sort);
-        return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        List<Journal> journalList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word, sort);
+        return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByIssn(String word, String column, String direction) {
+    public List<ScientificJournalDto> findAllByIssn(String word, String column, String direction) {
         Sort sort = orderBy(column, direction);
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word, sort);
-        return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        List<Journal> journalList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word, sort);
+        return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByEissn(String word, String column, String direction) {
+    public List<ScientificJournalDto> findAllByEissn(String word, String column, String direction) {
         Sort sort = orderBy(column, direction);
-        List<ScientificJournalDao> scientificJournalDaoList  = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word, sort);
-        return scientificJournalDaoList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        List<Journal> journalList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word, sort);
+        return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByCategory(Integer categoryId, String column, String direction) throws ResourceNotFoundException {
+    public List<ScientificJournalDto> findAllByCategory(Long categoryId, String column, String direction) throws ResourceNotFoundException {
         Sort sort = orderBy(column, direction);
-        List<ScientificJournalDao> scientificJournalDaoList = scientificJournalRepository.findAll(sort);
-        CategoryDao categoryDao = categoryRepository.findById(categoryId).orElseThrow(
+        List<Journal> journalList = scientificJournalRepository.findAll(sort);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new ResourceNotFoundException("Category with id: " + categoryId + " not found.")
         );
-        List<ScientificJournalDao> scientificJournalDaoByCategory = new ArrayList<>();
-        for(ScientificJournalDao scientificJournalDao : scientificJournalDaoList){
-            if (scientificJournalDao.getCategories().contains(categoryDao)){
-                scientificJournalDaoByCategory.add(scientificJournalDao);
+        List<Journal> journalByCategory = new ArrayList<>();
+        for(Journal journal : journalList){
+            if (journal.getCategories().contains(category)){
+                journalByCategory.add(journal);
             }
         }
-        return scientificJournalDaoByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        return journalByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournal> findAllByUser(Integer userId, String column, String direction) {
+    public List<ScientificJournalDto> findAllByUser(Long userId, String column, String direction) {
         return null;
     }
 
     @Override
-    public List<ScientificJournal> findAllByGroup(Integer groupId, String column, String direction) throws ResourceNotFoundException {
+    public List<ScientificJournalDto>  findAllByGroup(Long groupId, String column, String direction) throws ResourceNotFoundException {
         Sort sort = orderByForGroup(column, direction);
 //
 //        Group group = groupService.findById(groupId);
-        List<ScientificJournalDao> journals = scientificJournalRepository.findAllByGroup(groupId, sort);
+        List<Journal> journals = scientificJournalRepository.findAllByGroup(groupId, sort);
                 return journals.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public void delete(Integer id) throws ResourceNotFoundException{
+    public void delete(Long id) throws ResourceNotFoundException{
         scientificJournalRepository.deleteById(id);
     }
 
     @Override
-    public ScientificJournal save(ScientificJournal scientificJournal) {
-        return scientificJournalMapper.mapToDto(scientificJournalRepository.saveAndFlush(scientificJournalMapper.mapToDao(scientificJournal)));
+    public ScientificJournalDto save(ScientificJournalDto scientificJournalDto) {
+        return scientificJournalMapper.mapToDto(scientificJournalRepository.saveAndFlush(scientificJournalMapper.mapToDao(scientificJournalDto)));
     }
 
     private Sort orderBy(String column, String direction){

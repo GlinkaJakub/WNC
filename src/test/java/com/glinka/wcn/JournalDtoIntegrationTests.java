@@ -1,7 +1,7 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dto.Category;
-import com.glinka.wcn.model.dto.ScientificJournal;
+import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.service.CategoryService;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
+public class JournalDtoIntegrationTests extends BaseIntegrationTests {
 
     @Autowired
     ScientificJournalService journalService;
@@ -35,23 +35,23 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         //given
         String column = "eissn1";
         String direction = "desc";
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
 
-        HttpEntity<ScientificJournal> entity = new HttpEntity<>(null, headers);
+        HttpEntity<ScientificJournalDto> entity = new HttpEntity<>(null, headers);
         //when
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/allScientificJournal?column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journals?column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 column,
                 direction
         );
@@ -64,19 +64,19 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
 
     @Test
     public void testSaveScientificJournal(){
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
 
-        HttpEntity<ScientificJournal> entity = new HttpEntity<>(journal, headers);
+        HttpEntity<ScientificJournalDto> entity = new HttpEntity<>(journal, headers);
 
-        ResponseEntity<ScientificJournal> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/saveScientificJournal"),
+        ResponseEntity<ScientificJournalDto> response = restTemplate.exchange(
+                createURLWithPort("/api/journals"),
                 HttpMethod.POST,
                 entity,
-                ScientificJournal.class
+                ScientificJournalDto.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -95,25 +95,25 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testDeleteScientificJournal(){
         int id = 2;
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
         journalService.save(journal3);
 
-        HttpEntity<ScientificJournal> entity = new HttpEntity<>(null, headers);
+        HttpEntity<ScientificJournalDto> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/deleteScientificJournal?id={id}"),
-                HttpMethod.GET,
+        ResponseEntity<ScientificJournalDto> response = restTemplate.exchange(
+                createURLWithPort("/api/journals/{id}"),
+                HttpMethod.DELETE,
                 entity,
-                ScientificJournal.class,
+                ScientificJournalDto.class,
                 id
         );
 
@@ -127,16 +127,16 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
     public void testFindAllJournalByIds(){
         String column = "issn1";
         String direction = "asc";
-        List<Integer> ids = new ArrayList<>(Arrays.asList(3, 4));
+        List<Integer> ids = new ArrayList<>(Arrays.asList(2, 3));
         String idsAsString = idsToString(ids);
 
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -144,11 +144,11 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/findAllJournalsByIds?ids={idsAsString}&column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journals/ids?ids={idsAsString}&column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 idsAsString,
                 column,
                 direction
@@ -167,13 +167,13 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         String direction = "asc";
         String title = "title1";
 
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -181,11 +181,11 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/findAllJournalsByTitle?title={title}&column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journals/title?title={title}&column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 title,
                 column,
                 direction
@@ -203,13 +203,13 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         String direction = "asc";
         String issn = "issn1";
 
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -217,11 +217,11 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/findAllJournalsByIssn?issn={issn}&column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journals/issn?issn={issn}&column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 issn,
                 column,
                 direction
@@ -239,13 +239,13 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         String direction = "asc";
         String eissn = "eissn1";
 
-        Category category = new Category(1, "category1");
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        categoryService.save(category);
-        ScientificJournal journal1 = new ScientificJournal(2, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList);
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList);
+        CategoryDto categoryDto = new CategoryDto(1, "category1");
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto);
+        categoryService.save(categoryDto);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -253,11 +253,11 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/findAllJournalsByEissn?eissn={eissn}&column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/journals/eissn?eissn={eissn}&column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 eissn,
                 column,
                 direction
@@ -276,29 +276,29 @@ public class ScientificJournalIntegrationTests extends BaseIntegrationTests {
         String direction = "asc";
         String column = "eissn1";
 
-        Category category1 = new Category(1, "category1");
-        Category category2 = new Category(2, "category2");
-        List<Category> categoryList1 = new ArrayList<>();
-        List<Category> categoryList2 = new ArrayList<>();
-        categoryList1.add(category1);
-        categoryList2.add(category2);
-        categoryService.save(category1);
-        categoryService.save(category2);
+        CategoryDto categoryDto1 = new CategoryDto(1, "category1");
+        CategoryDto categoryDto2 = new CategoryDto(2, "category2");
+        List<CategoryDto> categoryDtoList1 = new ArrayList<>();
+        List<CategoryDto> categoryDtoList2 = new ArrayList<>();
+        categoryDtoList1.add(categoryDto1);
+        categoryDtoList2.add(categoryDto2);
+        categoryService.save(categoryDto1);
+        categoryService.save(categoryDto2);
 
-        ScientificJournal journal2 = new ScientificJournal(3, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList1);
-        ScientificJournal journal3 = new ScientificJournal(4, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList2);
-        ScientificJournal journal1 = new ScientificJournal(5, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList2);
+        ScientificJournalDto journal2 = new ScientificJournalDto(1, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList1);
+        ScientificJournalDto journal3 = new ScientificJournalDto(2, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList2);
+        ScientificJournalDto journal1 = new ScientificJournalDto(3, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList2);
         journalService.save(journal2);
         journalService.save(journal3);
         journalService.save(journal1);
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournal[]> response = restTemplate.exchange(
-                createURLWithPort("/api/journal/findAllJournalsByCategory?categoryId={categoryId}&column={column}&direction={direction}"),
+        ResponseEntity<ScientificJournalDto[]> response = restTemplate.exchange(
+                createURLWithPort("/api/categories/{categoryId}/journals?&column={column}&direction={direction}"),
                 HttpMethod.GET,
                 entity,
-                ScientificJournal[].class,
+                ScientificJournalDto[].class,
                 categoryId,
                 column,
                 direction

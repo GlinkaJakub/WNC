@@ -1,31 +1,31 @@
 package com.glinka.wcn.service;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.Group;
-import com.glinka.wcn.model.dto.ScientificJournal;
+import com.glinka.wcn.model.dto.GroupDto;
+import com.glinka.wcn.model.dto.ScientificJournalDto;
 
 import java.util.List;
 
 
 public interface GroupService {
 
-    List<Group> findAll();
-    Group findById(Integer id) throws ResourceNotFoundException;
-    List<Group> findAllByIds(List<Integer> ids);
+    List<GroupDto> findAll();
+    GroupDto findById(Long id) throws ResourceNotFoundException;
+    List<GroupDto> findAllByIds(List<Long> ids);
     //   Add new group
-    Group save(Group group);
+    GroupDto save(GroupDto groupDto);
     //   Add journal to group
-    Group addJournal(Integer scientificJournalId, Integer groupId) throws ResourceNotFoundException ;
+    GroupDto addJournal(Long scientificJournalId, Long groupId) throws ResourceNotFoundException ;
     //   Add user to group
-    Group addUser(Integer userId, Integer groupId) throws ResourceNotFoundException ;
+    GroupDto addUser(Long userId, Long groupId) throws ResourceNotFoundException ;
     //   Remove user from group
-    void removeUser(Integer userId, Integer groupId) throws ResourceNotFoundException;
+    void removeUser(Long userId, Long groupId) throws ResourceNotFoundException;
     //   Remove journal from group
-    void removeJournal(Integer scientificJournalId, Integer groupId) throws ResourceNotFoundException;
+    void removeJournal(Long scientificJournalId, Long groupId) throws ResourceNotFoundException;
     //   Find Journals by group
-    List<ScientificJournal> findJournalsByGroup(Integer groupId) throws ResourceNotFoundException;
+    List<ScientificJournalDto> findJournalsByGroup(Long groupId) throws ResourceNotFoundException;
     // find all groups bu user
-    List<Group> findAllByUser(Integer userId) throws ResourceNotFoundException;
+    List<GroupDto> findAllByUser(Long userId) throws ResourceNotFoundException;
 
 
 }

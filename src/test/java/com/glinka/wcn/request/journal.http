@@ -14,7 +14,7 @@ Content-Type: application/json
   "categories": [
     {
       "id": 2,
-      "name": "category3"
+      "name": "categoryDto3"
     }
   ]
 }

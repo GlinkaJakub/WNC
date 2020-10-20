@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class ScientificJournal {
+public class ScientificJournalDto {
 
-    private int id;
+    private long id;
     private String title1;
     private String issn1;
     private String eissn1;
@@ -21,5 +21,5 @@ public class ScientificJournal {
     private String issn2;
     private String eissn2;
     private int points;
-    private List<Category> categories;
+    private List<CategoryDto> categories;
 }

@@ -1,25 +1,25 @@
 package com.glinka.wcn.service.mapper;
 
-import com.glinka.wcn.model.dao.CategoryDao;
-import com.glinka.wcn.model.dto.Category;
+import com.glinka.wcn.model.dao.Category;
+import com.glinka.wcn.model.dto.CategoryDto;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CategoryMapper implements Mapper<Category, CategoryDao> {
+public class CategoryMapper implements Mapper<CategoryDto, Category> {
 
     @Override
-    public Category mapToDto(CategoryDao categoryDao) {
-        return Category.builder()
-                .id(categoryDao.getId())
-                .name(categoryDao.getName())
+    public CategoryDto mapToDto(Category category) {
+        return CategoryDto.builder()
+                .id(category.getCategoryId())
+                .name(category.getName())
                 .build();
     }
 
     @Override
-    public CategoryDao mapToDao(Category category) {
-        return CategoryDao.builder()
-                .id(category.getId())
-                .name(category.getName())
+    public Category mapToDao(CategoryDto categoryDto) {
+        return Category.builder()
+                .categoryId(categoryDto.getId())
+                .name(categoryDto.getName())
                 .build();
     }
 }

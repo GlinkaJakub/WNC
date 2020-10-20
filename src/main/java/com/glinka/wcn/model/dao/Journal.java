@@ -5,7 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @AllArgsConstructor
@@ -13,11 +19,12 @@ import java.util.List;
 @Builder
 @Data
 @Entity
-public class ScientificJournalDao {
+@Table(name = "journals")
+public class Journal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long journalId;
     private String title1;
     private String issn1;
     private String eissn1;
@@ -27,6 +34,6 @@ public class ScientificJournalDao {
     private int points;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<CategoryDao> categories;
+    private List<Category> categories;
 
 }

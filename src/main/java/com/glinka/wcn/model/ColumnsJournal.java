@@ -1,6 +1,7 @@
 package com.glinka.wcn.model;
 
 public enum ColumnsJournal {
+    ID("id"),
     TITLE1("title1"),
     ISSN1("issn1"),
     EISSN1("eissn1"),
