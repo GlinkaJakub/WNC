@@ -3,6 +3,7 @@ package com.glinka.wcn.service.impl;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.ColumnsJournal;
 import com.glinka.wcn.model.dao.Category;
+import com.glinka.wcn.model.dao.Group;
 import com.glinka.wcn.model.dao.Journal;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.repository.CategoryRepository;
@@ -12,6 +13,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScientificJournalServiceImpl implements ScientificJournalService {
 
+    public static final int SIZE = 20;
     private final Mapper<ScientificJournalDto, Journal> scientificJournalMapper;
     private final ScientificJournalRepository scientificJournalRepository;
     private final CategoryRepository categoryRepository;
@@ -39,15 +42,13 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournalDto> findAll(String column, String direction) {
-        Sort sort = orderBy(column, direction);
-        return scientificJournalRepository.findAll(sort).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+    public List<ScientificJournalDto> findAll(int page, String column, Sort.Direction direction) {
+        return scientificJournalRepository.findAllJournals(PageRequest.of(page, SIZE, direction, column)).stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournalDto> findAllById(List<Long> ids, String column, String direction) {
-        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAllByJournalIdIn(ids, sort);
+    public List<ScientificJournalDto> findAllById(List<Long> ids, int page, String column, Sort.Direction direction) {
+        List<Journal> journalList = scientificJournalRepository.findAllByJournalIdIn(ids, PageRequest.of(page, SIZE, direction, column));
         return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
@@ -60,30 +61,27 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByTitle(String word, String column, String direction) {
-        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word, sort);
+    public List<ScientificJournalDto> findAllByTitle(String word, int page, String column, Sort.Direction direction) {
+        List<Journal> journalList = scientificJournalRepository.findAllByTitle1ContainingOrTitle2Containing(word, word, PageRequest.of(page, SIZE, direction, column));
         return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByIssn(String word, String column, String direction) {
-        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word, sort);
+    public List<ScientificJournalDto> findAllByIssn(String word, int page, String column, Sort.Direction direction) {
+        List<Journal> journalList = scientificJournalRepository.findAllByIssn1ContainingOrIssn2Containing(word, word, PageRequest.of(page, SIZE, direction, column));
         return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByEissn(String word, String column, String direction) {
-        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word, sort);
+    public List<ScientificJournalDto> findAllByEissn(String word, int page, String column, Sort.Direction direction) {
+        List<Journal> journalList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2Containing(word, word, PageRequest.of(page, SIZE, direction, column));
         return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByCategory(Long categoryId, String column, String direction) throws ResourceNotFoundException {
-        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAll(sort);
+    public List<ScientificJournalDto> findAllByCategory(Long categoryId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
+//        Sort sort = orderBy(column, direction);
+        List<Journal> journalList = scientificJournalRepository.findAllJournals(PageRequest.of(page, SIZE, direction, column));
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new ResourceNotFoundException("Category with id: " + categoryId + " not found.")
         );
@@ -97,49 +95,29 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByUser(Long userId, String column, String direction) {
+    public List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) {
         return null;
     }
 
     @Override
-    public List<ScientificJournalDto>  findAllByGroup(Long groupId, String column, String direction) throws ResourceNotFoundException {
-        Sort sort = orderByForGroup(column, direction);
-//
-//        Group group = groupService.findById(groupId);
-        List<Journal> journals = scientificJournalRepository.findAllByGroup(groupId, sort);
+    public List<ScientificJournalDto>  findAllByGroup(Long groupId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
+        List<Journal> journals = scientificJournalRepository.findAllByGroup(groupId, PageRequest.of(page, SIZE, direction, column));
                 return journals.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
     public void delete(Long id) throws ResourceNotFoundException{
+        Journal journals = scientificJournalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Journal with id: " + id + "    not found"));
+        for (Group g : journals.getGroups()){
+            long groupId = groupService.findById(g.getGroupId()).getId();
+            groupService.removeJournal(id, groupId);
+        }
         scientificJournalRepository.deleteById(id);
     }
 
     @Override
     public ScientificJournalDto save(ScientificJournalDto scientificJournalDto) {
         return scientificJournalMapper.mapToDto(scientificJournalRepository.saveAndFlush(scientificJournalMapper.mapToDao(scientificJournalDto)));
-    }
-
-    private Sort orderBy(String column, String direction){
-        for(ColumnsJournal c : ColumnsJournal.values()){
-            if (column.equals(c.getColumn())) {
-                if (direction.equals("desc"))
-                    return Sort.by(Sort.Direction.DESC, column);
-                return Sort.by(Sort.Direction.ASC, column);
-            }
-        }
-        return Sort.by(Sort.Direction.ASC, "id");
-    }
-
-    private Sort orderByForGroup(String column, String direction){
-        for(ColumnsJournal c : ColumnsJournal.values()){
-            if (column.equals(c.getColumn())) {
-                if (direction.equals("desc"))
-                    return Sort.by(Sort.Direction.DESC, "g.journals." + column);
-                return Sort.by(Sort.Direction.ASC, "g.journals." + column);
-            }
-        }
-        return Sort.by(Sort.Direction.ASC, "g.journals.id");
     }
 }
 

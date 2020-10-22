@@ -44,7 +44,6 @@ public class RestUserController {
             return Collections.emptyList();
         }
         return data;
-        //TODO("change response from Srting to List")
     }
 
     @GetMapping("/users/{id}")
@@ -68,4 +67,5 @@ public class RestUserController {
         return userService.findAllById(ids);
     }
 
+    //TODO update user
 }

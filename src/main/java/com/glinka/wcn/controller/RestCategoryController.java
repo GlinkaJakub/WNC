@@ -56,4 +56,5 @@ public class RestCategoryController {
         return categoryService.findById(id);
     }
 
+    //TODO update category
 }

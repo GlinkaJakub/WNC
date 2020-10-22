@@ -8,6 +8,7 @@ import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     public void testGetAllJournals(){
         //given
         String column = "eissn1";
-        String direction = "desc";
+        String direction = "DESC";
         CategoryDto categoryDto = new CategoryDto(1, "category1");
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
@@ -118,15 +119,14 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        int i = journalService.findAll("issn1", "asc").size();
-        assertEquals(2, journalService.findAll("title1", "a").size());
+        assertEquals(2, journalService.findAll(0, "title1", Sort.Direction.ASC).size());
     }
 
     // /findAllJournalsByIds
     @Test
     public void testFindAllJournalByIds(){
         String column = "issn1";
-        String direction = "asc";
+        String direction = "ASC";
         List<Integer> ids = new ArrayList<>(Arrays.asList(2, 3));
         String idsAsString = idsToString(ids);
 
@@ -164,7 +164,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testFindAllJournalByTitle(){
         String column = "issn1";
-        String direction = "asc";
+        String direction = "ASC";
         String title = "title1";
 
         CategoryDto categoryDto = new CategoryDto(1, "category1");
@@ -200,7 +200,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testFindAllJournalByIssn(){
         String column = "issn1";
-        String direction = "asc";
+        String direction = "ASC";
         String issn = "issn1";
 
         CategoryDto categoryDto = new CategoryDto(1, "category1");
@@ -236,7 +236,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testFindAllJournalByEissn(){
         String column = "issn1";
-        String direction = "asc";
+        String direction = "ASC";
         String eissn = "eissn1";
 
         CategoryDto categoryDto = new CategoryDto(1, "category1");
@@ -273,7 +273,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testFindAllByCategory(){
         int categoryId = 2;
-        String direction = "asc";
+        String direction = "ASC";
         String column = "eissn1";
 
         CategoryDto categoryDto1 = new CategoryDto(1, "category1");
@@ -314,7 +314,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
 //    @Test
 //    public void testFindAllByGroup() throws ResourceNotFoundException {
 //        int groupId = 2;
-//        String direction = "desc";
+//        String direction = "DESC";
 //        String column = "issn1";
 //
 //        //user1

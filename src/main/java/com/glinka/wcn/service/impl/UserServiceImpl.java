@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) throws ResourceNotFoundException{
+        findById(id);
         List<Long> idsGroups = groupService.findAllByUser(id).stream().map(GroupDto::getId).collect(Collectors.toList());
         idsGroups.forEach(idGroup -> {
             try {

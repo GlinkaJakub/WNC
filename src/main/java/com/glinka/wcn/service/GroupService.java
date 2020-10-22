@@ -26,6 +26,8 @@ public interface GroupService {
     List<ScientificJournalDto> findJournalsByGroup(Long groupId) throws ResourceNotFoundException;
     // find all groups bu user
     List<GroupDto> findAllByUser(Long userId) throws ResourceNotFoundException;
+    // delete group
+    void deleteGroup(Long id) throws ResourceNotFoundException;
 
 
 }

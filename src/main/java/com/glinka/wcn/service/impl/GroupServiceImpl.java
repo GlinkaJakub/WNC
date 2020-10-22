@@ -39,7 +39,6 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDto> findAll() {
-        List<Group> groups = groupRepository.findAll();
         return groupRepository.findAll().stream().map(groupMapper::mapToDto).collect(Collectors.toList());
     }
 
@@ -141,5 +140,11 @@ public class GroupServiceImpl implements GroupService {
             }
         }
         return groupDaosByUser.stream().map(groupMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteGroup(Long id) throws ResourceNotFoundException {
+        findById(id);
+        groupRepository.deleteById(id);
     }
 }

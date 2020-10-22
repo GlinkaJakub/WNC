@@ -69,4 +69,11 @@ public class RestGroupController {
     public void removeUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
         groupService.removeUser(userId, groupId);
     }
+
+    @DeleteMapping("/groups/{groupId}")
+    public void deleteGroup(@PathVariable Long groupId) throws ResourceNotFoundException{
+        groupService.deleteGroup(groupId);
+    }
+
+    //TODO update group
 }

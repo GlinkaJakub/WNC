@@ -3,15 +3,20 @@ package com.glinka.wcn.model.dao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+//@Data
 @Entity
+@Setter
+@Getter
 @Table(name = "users")
 public class User {
 
@@ -24,4 +29,7 @@ public class User {
     private String name;
     private String surname;
     private byte enabled = 1;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Group> groups;
 }
