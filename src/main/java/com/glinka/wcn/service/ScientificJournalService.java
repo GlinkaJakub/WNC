@@ -18,7 +18,7 @@ public interface ScientificJournalService {
     List<ScientificJournalDto> findAllByIssn(String word, int page, String column, Sort.Direction direction);
     List<ScientificJournalDto> findAllByEissn(String word, int page, String column, Sort.Direction direction);
     List<ScientificJournalDto> findAllByCategory(Long categoryId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
-    List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
     List<ScientificJournalDto> findAllByGroup(Long groupId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
     //   Remove journal
     void delete(Long id) throws ResourceNotFoundException;

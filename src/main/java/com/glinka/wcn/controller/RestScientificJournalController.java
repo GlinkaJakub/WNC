@@ -112,9 +112,10 @@ public class RestScientificJournalController {
     public List<ScientificJournalDto> findAllJournalsByUser(@PathVariable Long userId,
                                                             @RequestParam(required = false, defaultValue = "0") int page,
                                                             @RequestParam(required = false, defaultValue = "journalId") String column,
-                                                            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction){
-        throw new IllegalArgumentException("Not implemented yet");
-//        return scientificJournalService.findAllByUser(userId, column, direction);
+                                                            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction) throws ResourceNotFoundException {
+        int pageNumber = page >= 0 ? page : 0;
+//        throw new IllegalArgumentException("Not implemented yet");
+        return scientificJournalService.findAllByUser(userId, pageNumber, column, direction);
     }
 
     @GetMapping("/groups/{groupId}/journals")
@@ -122,8 +123,9 @@ public class RestScientificJournalController {
                                                              @RequestParam(required = false, defaultValue = "0") int page,
                                                              @RequestParam(required = false, defaultValue = "journalId") String column,
                                                              @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction) throws ResourceNotFoundException {
-        throw new IllegalArgumentException("Not implemented yet");
-//        return scientificJournalService.findAllByGroup(groupId, column, direction);
+//        throw new IllegalArgumentException("Not implemented yet");
+        int pageNumber = page >= 0 ? page : 0;
+        return scientificJournalService.findAllByGroup(groupId, pageNumber, column, direction);
     }
 
     //TODO update journal

@@ -1,25 +1,33 @@
 package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.ColumnsJournal;
 import com.glinka.wcn.model.dao.Category;
 import com.glinka.wcn.model.dao.Group;
 import com.glinka.wcn.model.dao.Journal;
+import com.glinka.wcn.model.dao.User;
+import com.glinka.wcn.model.dto.GroupDto;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.repository.CategoryRepository;
+import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
+import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,15 +38,17 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     private final ScientificJournalRepository scientificJournalRepository;
     private final CategoryRepository categoryRepository;
     private final GroupService groupService;
-    private final UserService userService;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ScientificJournalServiceImpl(Mapper<ScientificJournalDto, Journal> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository, GroupService groupService, UserService userService) {
+    public ScientificJournalServiceImpl(Mapper<ScientificJournalDto, Journal> scientificJournalMapper, ScientificJournalRepository scientificJournalRepository, CategoryRepository categoryRepository, GroupService groupService, GroupRepository groupRepository, UserRepository userRepository) {
         this.scientificJournalMapper = scientificJournalMapper;
         this.scientificJournalRepository = scientificJournalRepository;
         this.categoryRepository = categoryRepository;
         this.groupService = groupService;
-        this.userService = userService;
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -95,14 +105,24 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
-    public List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) {
-        return null;
+    public List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
+        List<GroupDto> groupDtos = groupService.findAllByUser(user.getUserId());
+        Set<Long> journalIds = new HashSet<>();
+        for (GroupDto g : groupDtos){
+            journalIds.addAll(g.getJournals().stream().map(ScientificJournalDto::getId).collect(Collectors.toSet()));
+        }
+        return findAllById(new ArrayList<>(journalIds), page, column, direction);
     }
 
     @Override
     public List<ScientificJournalDto>  findAllByGroup(Long groupId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
-        List<Journal> journals = scientificJournalRepository.findAllByGroup(groupId, PageRequest.of(page, SIZE, direction, column));
-                return journals.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("Group with id: " + groupId + " not found"));
+        List<Long> journalsIds = new ArrayList<>();
+        for (Journal j : group.getJournals()){
+            journalsIds.add(j.getJournalId());
+        }
+        return findAllById(journalsIds, page, column, direction);
     }
 
     @Override
