@@ -18,6 +18,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,19 +37,32 @@ public class Journal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long journalId;
+
+    @NotBlank
     private String title1;
+
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$")
     private String issn1;
+
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$")
     private String eissn1;
+
     private String title2;
+
+    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$")
     private String issn2;
+
+    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$")
     private String eissn2;
+
+    @PositiveOrZero
     private int points;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "journal_id")
-    private List<Category> categories;
+    private List<@Valid Category> categories;
 
     @ManyToMany(mappedBy = "journals")
-    private List<Group> groups;
+    private List<@Valid Group> groups;
 
 }

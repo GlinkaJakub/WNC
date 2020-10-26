@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class RestCategoryController {
     }
 
     @PostMapping("/categories")
-    public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto){
+    public CategoryDto saveCategory(@RequestBody @Valid CategoryDto categoryDto){
         return categoryService.save(categoryDto);
     }
 

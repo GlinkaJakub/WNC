@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -125,6 +126,7 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
         return findAllById(journalsIds, page, column, direction);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) throws ResourceNotFoundException{
         Journal journals = scientificJournalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Journal with id: " + id + "    not found"));

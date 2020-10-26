@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,12 +30,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
+    @Email
     private String email;
+
+    @Size(min = 8)
     private String password;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String surname;
+
+    @PositiveOrZero
     private byte enabled = 1;
 
     @ManyToMany(mappedBy = "users")
-    private List<Group> groups;
+    private List<@Valid Group> groups;
 }

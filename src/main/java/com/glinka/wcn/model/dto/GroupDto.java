@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @AllArgsConstructor
@@ -13,9 +16,14 @@ import java.util.List;
 @Data
 public class GroupDto {
 
+    @PositiveOrZero
     private long id;
+
+    @NotBlank
     private String name;
-    private List<UserDto> userDtos;
-    private List<ScientificJournalDto> journals;
+
+    private List<@Valid UserDto> userDtos;
+
+    private List<@Valid ScientificJournalDto> journals;
 
 }

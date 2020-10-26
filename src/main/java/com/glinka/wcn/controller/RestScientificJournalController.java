@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class RestScientificJournalController {
     }
 
     @PostMapping("/journals")
-    public ScientificJournalDto saveScientificJournal(@RequestBody ScientificJournalDto scientificJournalDto){
+    public ScientificJournalDto saveScientificJournal(@RequestBody @Valid ScientificJournalDto scientificJournalDto){
         return scientificJournalService.save(scientificJournalDto);
     }
 

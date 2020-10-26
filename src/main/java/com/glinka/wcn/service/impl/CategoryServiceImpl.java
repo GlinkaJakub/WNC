@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -51,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> findAllById(List<Long> ids) {
         List<Category> categoryList = categoryRepository.findAllById(ids);
-//        return categoryList.stream().map(categoryMapper::mapToDto).collect(Collectors.toList());
-        return categoryMapper.mapToListDto(categoryList);
+        return categoryList.stream().map(categoryMapper::mapToDto).collect(Collectors.toList());
+//        return categoryMapper.mapToListDto(categoryList);
     }
 }

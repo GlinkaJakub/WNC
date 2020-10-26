@@ -12,6 +12,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,13 +30,14 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
 
+    @NotBlank
     private String name;
     //TO DO
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> users;
+    private List<@Valid User> users;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Journal> journals;
+    private List<@Valid Journal> journals;
 }

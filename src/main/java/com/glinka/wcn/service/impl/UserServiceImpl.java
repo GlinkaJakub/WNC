@@ -12,6 +12,7 @@ import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
         this.groupService = groupService;
     }
 
+    @Transactional
     @Override
     public UserDto save(UserDto userDto){
         User newUser = userRepository.saveAndFlush(userMapper.mapToDao(userDto));
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(userMapper::mapToDto).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void delete(Long id) throws ResourceNotFoundException{
         findById(id);
