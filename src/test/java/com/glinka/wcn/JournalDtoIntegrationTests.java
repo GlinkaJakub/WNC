@@ -34,14 +34,14 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testGetAllJournals(){
         //given
-        String column = "eissn1";
+        String column = "issn1";
         String direction = "DESC";
         CategoryDto categoryDto = new CategoryDto(1, "category1");
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -69,7 +69,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
+        ScientificJournalDto journal = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
 
         HttpEntity<ScientificJournalDto> entity = new HttpEntity<>(journal, headers);
 
@@ -83,11 +83,11 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(journal, response.getBody());
         assertEquals("title1", response.getBody().getTitle1());
-        assertEquals("issn1", response.getBody().getIssn1());
-        assertEquals("eissn1", response.getBody().getEissn1());
+        assertEquals("1234-1234", response.getBody().getIssn1());
+        assertEquals("1234-1234", response.getBody().getEissn1());
         assertEquals("title2", response.getBody().getTitle2());
-        assertEquals("issn2", response.getBody().getIssn2());
-        assertEquals("eissn2", response.getBody().getEissn2());
+        assertEquals("2345-2345", response.getBody().getIssn2());
+        assertEquals("2345-2345", response.getBody().getEissn2());
         assertEquals(30, response.getBody().getPoints());
         assertEquals(1, response.getBody().getCategories().size());
         assertEquals("category1", response.getBody().getCategories().get(0).getName());
@@ -100,9 +100,9 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
-        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -134,9 +134,9 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
-        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -171,9 +171,9 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
-        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -201,15 +201,15 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     public void testFindAllJournalByIssn(){
         String column = "issn1";
         String direction = "ASC";
-        String issn = "issn1";
+        String issn = "1234-1234";
 
         CategoryDto categoryDto = new CategoryDto(1, "category1");
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
-        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -235,17 +235,17 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     // /findAllJournalsByEissn
     @Test
     public void testFindAllJournalByEissn(){
-        String column = "issn1";
+        String column = "eissn1";
         String direction = "ASC";
-        String eissn = "eissn1";
+        String eissn = "1234-1234";
 
         CategoryDto categoryDto = new CategoryDto(1, "category1");
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         categoryDtoList.add(categoryDto);
         categoryService.save(categoryDto);
-        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList);
-        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
-        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList);
+        ScientificJournalDto journal1 = new ScientificJournalDto(1, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList);
+        ScientificJournalDto journal2 = new ScientificJournalDto(2, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
+        ScientificJournalDto journal3 = new ScientificJournalDto(3, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList);
 
         journalService.save(journal1);
         journalService.save(journal2);
@@ -274,7 +274,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
     public void testFindAllByCategory(){
         int categoryId = 2;
         String direction = "ASC";
-        String column = "eissn1";
+        String column = "issn1";
 
         CategoryDto categoryDto1 = new CategoryDto(1, "category1");
         CategoryDto categoryDto2 = new CategoryDto(2, "category2");
@@ -285,9 +285,9 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
         categoryService.save(categoryDto1);
         categoryService.save(categoryDto2);
 
-        ScientificJournalDto journal2 = new ScientificJournalDto(1, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList1);
-        ScientificJournalDto journal3 = new ScientificJournalDto(2, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryDtoList2);
-        ScientificJournalDto journal1 = new ScientificJournalDto(3, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryDtoList2);
+        ScientificJournalDto journal2 = new ScientificJournalDto(1, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList1);
+        ScientificJournalDto journal3 = new ScientificJournalDto(2, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryDtoList2);
+        ScientificJournalDto journal1 = new ScientificJournalDto(3, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryDtoList2);
         journalService.save(journal2);
         journalService.save(journal3);
         journalService.save(journal1);
@@ -315,7 +315,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
 //    public void testFindAllByGroup() throws ResourceNotFoundException {
 //        int groupId = 2;
 //        String direction = "DESC";
-//        String column = "issn1";
+//        String column = "1234-1234";
 //
 //        //user1
 //        User user1 = new User(1, "email@wp.pl", "password", "Jan", "Kowalski");
@@ -332,9 +332,9 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
 //        categoryService.save(category1);
 //        categoryService.save(category2);
 //
-//        ScientificJournal journal2 = new ScientificJournal(7, "title3", "issn3", "eissn3", "title4", "issn4", "eissn4", 35, categoryList1);
-//        ScientificJournal journal3 = new ScientificJournal(8, "title5", "issn5", "eissn3", "title4", "issn4", "eissn4", 35, categoryList2);
-//        ScientificJournal journal1 = new ScientificJournal(9, "title1", "issn1", "eissn1", "title2", "issn2", "eissn2", 30, categoryList2);
+//        ScientificJournal journal2 = new ScientificJournal(7, "title3", "3456-3456", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryList1);
+//        ScientificJournal journal3 = new ScientificJournal(8, "title5", "5678-5678", "3456-3456", "title4", "4567-4567", "4567-4567", 35, categoryList2);
+//        ScientificJournal journal1 = new ScientificJournal(9, "title1", "1234-1234", "1234-1234", "title2", "2345-2345", "2345-2345", 30, categoryList2);
 //        journalService.save(journal2);
 //        journalService.save(journal3);
 //        journalService.save(journal1);

@@ -131,7 +131,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
         categoryService.save(categoryDto);
         List<CategoryDto> categories = new ArrayList<>();
         categories.add(categoryDto);
-        ScientificJournalDto journal = new ScientificJournalDto(1, "title", "issn", "eissn", "title2", "issn2", "eissn2", 30, categories);
+        ScientificJournalDto journal = new ScientificJournalDto(1, "title", "2345-4563", "2345-4563", "title2", "7484-4983", "7484-4983", 30, categories);
         journalService.save(journal);
 
         ResponseEntity<GroupDto> response = restTemplate.exchange(
@@ -159,7 +159,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
         categoryService.save(categoryDto);
         List<CategoryDto> categories = new ArrayList<>();
         categories.add(categoryDto);
-        ScientificJournalDto journal = new ScientificJournalDto(1, "title", "issn", "eissn", "title2", "issn2", "eissn2", 30, categories);
+        ScientificJournalDto journal = new ScientificJournalDto(1, "title", "2345-4563", "2345-4563", "title2", "7484-4983", "7484-4983", 30, categories);
         journalService.save(journal);
         groupService.addJournal(journalId, groupId);
 
