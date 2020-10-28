@@ -1,6 +1,7 @@
 package com.glinka.wcn;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dto.CategoryDto;
 import com.glinka.wcn.model.dto.GroupDto;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
@@ -44,7 +45,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
                 GroupDto.class
         );
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(groupDto1, response.getBody());
     }
 
@@ -69,11 +70,11 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testFindGroupByUser(){
+    public void testFindGroupByUser() throws UserAlreadyExistException {
         int userId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "Jerzy", "Nowak");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
         List<UserDto> userDtos = new ArrayList<>();
@@ -97,11 +98,11 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testFindGroupById(){
+    public void testFindGroupById() throws UserAlreadyExistException {
         int groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "Jerzy", "Nowak");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
 
@@ -121,11 +122,11 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testAddJournalToGroup(){
+    public void testAddJournalToGroup() throws UserAlreadyExistException {
         int groupId = 1;
         int journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
         userService.save(userDto1);
         CategoryDto categoryDto = new CategoryDto(1, "category");
         categoryService.save(categoryDto);
@@ -149,11 +150,11 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testRemoveJournalFromGroup() throws ResourceNotFoundException {
+    public void testRemoveJournalFromGroup() throws ResourceNotFoundException, UserAlreadyExistException {
         long groupId = 1;
         long journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
         userService.save(userDto1);
         CategoryDto categoryDto = new CategoryDto(1, "category");
         categoryService.save(categoryDto);
@@ -165,11 +166,11 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
 
         assertEquals(1, groupService.findById(groupId).getJournals().size());
 
-        ResponseEntity<GroupDto> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/api/groups/{groupId}/journals/{journalId}"),
                 HttpMethod.DELETE,
                 entity,
-                GroupDto.class,
+                String.class,
                 groupId,
                 journalId
         );
@@ -179,12 +180,12 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testAddUserToGroup(){
+    public void testAddUserToGroup() throws UserAlreadyExistException {
         long userId = 2;
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "Jerzy", "Nowak");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
 
@@ -204,23 +205,23 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testRemoveUserFromGroup() throws ResourceNotFoundException {
+    public void testRemoveUserFromGroup() throws ResourceNotFoundException, UserAlreadyExistException {
         long userId = 2;
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "Jerzy", "Nowak");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
         groupService.addUser(userId, groupId);
 
         assertEquals(2, groupService.findById(groupId).getUserDtos().size());
 
-        ResponseEntity<GroupDto> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/api/groups/{groupId}/users/{userId}"),
                 HttpMethod.DELETE,
                 entity,
-                GroupDto.class,
+                String.class,
                 groupId,
                 userId
         );

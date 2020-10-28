@@ -1,13 +1,18 @@
 package com.glinka.wcn.controller;
 
+import com.glinka.wcn.commons.InvalidOldPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,43 +34,49 @@ public class RestUserController {
     }
 
     @PostMapping("/users")
-    public UserDto saveUser(@RequestBody @Valid UserDto userDto){
-        return userService.save(userDto);
+    public ResponseEntity<UserDto> saveUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistException{
+        return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<UserDto> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @PathVariable Long userId) throws ResourceNotFoundException, InvalidOldPasswordException {
+        return new ResponseEntity<>(userService.changePassword(userId, oldPassword, newPassword), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
         userService.delete(id);
+        return new ResponseEntity<>("Deleted user with id: " + id, HttpStatus.OK);
     }
 
     @GetMapping("/users")
-    public List<UserDto> findAllUsers(){
+    public ResponseEntity<List<UserDto>> findAllUsers(){
         List<UserDto> data = userService.findAll();
         if (data == null || data.isEmpty()){
-            return Collections.emptyList();
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
-        return data;
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public UserDto userById(@PathVariable Long id) throws ResourceNotFoundException {
-        return userService.findById(id);
+    public ResponseEntity<UserDto> userById(@PathVariable Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/users/names/{user}")
-    public List<UserDto> findUser(@PathVariable String user){
-        return userService.findAllByNameOrSurname(user);
+    public ResponseEntity<List<UserDto>> findUser(@PathVariable String user){
+        return new ResponseEntity<>(userService.findAllByNameOrSurname(user), HttpStatus.OK);
     }
 
 
     @GetMapping("/users/emails/{email}")
-    public UserDto findUserByEmail(@PathVariable String email){
-        return userService.findByEmail(email);
+    public ResponseEntity<UserDto> findUserByEmail(@PathVariable String email){
+        return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/users/ids")
-    public List<UserDto> findAllUsersByIds(@RequestParam List<Long> ids){
-        return userService.findAllById(ids);
+    public ResponseEntity<List<UserDto>> findAllUsersByIds(@RequestParam List<Long> ids){
+        return new ResponseEntity<>(userService.findAllById(ids), HttpStatus.OK);
     }
 
     //TODO update user

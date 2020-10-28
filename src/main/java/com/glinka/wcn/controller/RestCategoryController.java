@@ -4,6 +4,8 @@ import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.CategoryDto;
 import com.glinka.wcn.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,33 +31,32 @@ public class RestCategoryController {
     }
 
     @GetMapping("/categories")
-    public List<CategoryDto> findAllCategory(){
+    public ResponseEntity<List<CategoryDto>> findAllCategory(){
         List<CategoryDto> data = categoryService.findAll();
         if (data == null || data.isEmpty()){
-            return Collections.emptyList();
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
-        return data;
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @PostMapping("/categories")
-    public CategoryDto saveCategory(@RequestBody @Valid CategoryDto categoryDto){
-        return categoryService.save(categoryDto);
+    public ResponseEntity<CategoryDto> saveCategory(@RequestBody @Valid CategoryDto categoryDto){
+        return new ResponseEntity<>(categoryService.save(categoryDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/categories/{id}")
-    public void deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
         categoryService.delete(id);
+        return new ResponseEntity<>("Delete category with id: " + id, HttpStatus.OK);
     }
 
     @GetMapping("/categories/ids")
-    public List<CategoryDto> findAllCategoryByIds(@RequestParam List<Long> ids){
-        return categoryService.findAllById(ids);
+    public ResponseEntity<List<CategoryDto>> findAllCategoryByIds(@RequestParam List<Long> ids){
+        return new ResponseEntity<>(categoryService.findAllById(ids), HttpStatus.OK);
     }
 
     @GetMapping("/categories/{id}")
-    public CategoryDto findCategoryById(@PathVariable("id") Long id) throws ResourceNotFoundException {
-        return categoryService.findById(id);
+    public ResponseEntity<CategoryDto> findCategoryById(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
     }
-
-    //TODO update category
 }

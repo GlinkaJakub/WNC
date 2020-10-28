@@ -1,6 +1,8 @@
 package com.glinka.wcn.service.impl;
 
+import com.glinka.wcn.commons.InvalidOldPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dao.User;
 import com.glinka.wcn.model.dto.GroupDto;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
@@ -35,14 +37,31 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto save(UserDto userDto){
-        User newUser = userRepository.saveAndFlush(userMapper.mapToDao(userDto));
+    public UserDto save(UserDto userDto) throws UserAlreadyExistException {
+        if (emailExist(userDto.getEmail())){
+            throw new UserAlreadyExistException(
+                    "There is an account with email address: " + userDto.getEmail()
+            );
+        }
+        User newUser = userRepository.save(userMapper.mapToDao(userDto));
         List<UserDto> userDtos = new ArrayList<>();
         List<ScientificJournalDto> scientificJournalDtos = new ArrayList<>();
         userDtos.add(userMapper.mapToDto(newUser));
         GroupDto newGroupDto = new GroupDto(0, newUser.getName() + " group", userDtos, scientificJournalDtos);
         groupService.save(newGroupDto);
         return userMapper.mapToDto(newUser);
+    }
+
+    @Transactional
+    @Override
+    public UserDto changePassword(Long userId, String oldPassword, String newPassword) throws ResourceNotFoundException, InvalidOldPasswordException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with id :" + userId + " not found"));
+        if (!user.getPassword().equals(oldPassword) || newPassword.length() <8 ) {
+            throw new InvalidOldPasswordException("Wrong old password");
+        }
+        user.setPassword(newPassword);
+        userRepository.save(user);
+        return userMapper.mapToDto(user);
     }
 
     @Override
@@ -91,6 +110,10 @@ public class UserServiceImpl implements UserService {
     public UserDto findByEmail(String email) {
         User user = userRepository.findUserByEmail(email);
         return userMapper.mapToDto(user);
+    }
+
+    private boolean emailExist(String email){
+        return userRepository.findUserByEmail(email) != null;
     }
 
 }

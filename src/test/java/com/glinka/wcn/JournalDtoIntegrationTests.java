@@ -80,7 +80,7 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
                 ScientificJournalDto.class
         );
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(journal, response.getBody());
         assertEquals("title1", response.getBody().getTitle1());
         assertEquals("1234-1234", response.getBody().getIssn1());
@@ -110,11 +110,11 @@ public class JournalDtoIntegrationTests extends BaseIntegrationTests {
 
         HttpEntity<ScientificJournalDto> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<ScientificJournalDto> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/api/journals/{id}"),
                 HttpMethod.DELETE,
                 entity,
-                ScientificJournalDto.class,
+                String.class,
                 id
         );
 

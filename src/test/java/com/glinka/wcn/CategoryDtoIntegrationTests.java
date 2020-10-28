@@ -46,7 +46,7 @@ public class CategoryDtoIntegrationTests extends BaseIntegrationTests {
                 entity,
                 CategoryDto.class
         );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         assertEquals("computer science", response.getBody().getName());
     }
@@ -59,11 +59,11 @@ public class CategoryDtoIntegrationTests extends BaseIntegrationTests {
         categoryService.save(new CategoryDto(1, "category"));
         categoryService.save(new CategoryDto(2, "second Category"));
 
-        ResponseEntity<CategoryDto> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/api/categories/{id}"),
                 HttpMethod.DELETE,
                 entity,
-                CategoryDto.class,
+                String.class,
                 id);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());

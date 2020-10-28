@@ -21,7 +21,7 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
 
     @Test
     public void testCreateUser() throws Exception {
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1");
         HttpEntity<UserDto> user = new HttpEntity<>(userDto1, headers);
         ResponseEntity<UserDto> response = restTemplate.exchange(
 
@@ -29,7 +29,7 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
                 HttpMethod.POST,
                 user,
                 UserDto.class);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         assertEquals("email@wp.pl", response.getBody().getEmail());
         assertEquals("password", response.getBody().getPassword());
@@ -40,8 +40,8 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
     @Test
     public void testGetUsers() throws Exception {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "password2", "name2", "surname2");
         userService.save(userDto1);
         userService.save(userDto2);
         ResponseEntity<UserDto[]> response = restTemplate.exchange(
@@ -58,7 +58,7 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         int id = 1;
-        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1"));
         //when
         ResponseEntity<UserDto> response = restTemplate.exchange(
                 createURLWithPort("/api/users/{id}"),
@@ -80,14 +80,14 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         int id = 1;
-        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
-        userService.save(new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1"));
+        userService.save(new UserDto(2, "email2@wp.pl", "password2", "password2", "name2", "surname2"));
         //when
-        ResponseEntity<UserDto> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/api/users/{id}"),
                 HttpMethod.DELETE,
                 entity,
-                UserDto.class,
+                String.class,
                 id);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -99,7 +99,7 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         String name = "name1";
-        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1"));
         //when
         ResponseEntity<UserDto[]> response = restTemplate.exchange(
                 createURLWithPort("/api/users/names/{name}"),
@@ -121,7 +121,7 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
         //given
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         String email = "email@wp.pl";
-        userService.save(new UserDto(1, "email@wp.pl", "password", "name1", "surname1"));
+        userService.save(new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1"));
         //when
         ResponseEntity<UserDto> response = restTemplate.exchange(
                 createURLWithPort("/api/users/emails/{email}"),
@@ -146,10 +146,10 @@ class UserDtoIntegrationTests extends BaseIntegrationTests {
         ids.add(1);
         ids.add(3);
         String idsToString = idsToString(ids);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "name1", "surname1");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "name2", "surname2");
-        UserDto userDto3 = new UserDto(3, "email3@wp.pl", "password2", "name2", "surname2");
-        UserDto userDto4 = new UserDto(4, "email4@wp.pl", "password2", "name2", "surname2");
+        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "name1", "surname1");
+        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password2", "password2", "name2", "surname2");
+        UserDto userDto3 = new UserDto(3, "email3@wp.pl", "password2", "password2", "name2", "surname2");
+        UserDto userDto4 = new UserDto(4, "email4@wp.pl", "password2", "password2", "name2", "surname2");
         userService.save(userDto1);
         userService.save(userDto2);
         userService.save(userDto3);

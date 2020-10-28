@@ -4,6 +4,8 @@ import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.GroupDto;
 import com.glinka.wcn.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,52 +30,56 @@ public class RestGroupController {
     }
 
     @GetMapping("/groups")
-    public List<GroupDto> findAllGroup(){
+    public ResponseEntity<List<GroupDto>> findAllGroup(){
         List<GroupDto> data = groupService.findAll();
         if (data == null || data.isEmpty()){
-            return Collections.emptyList();
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
-        return data;
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @PostMapping("/groups")
-    public GroupDto saveGroup(@RequestBody @Valid GroupDto groupDto){
-        return groupService.save(groupDto);
+    public ResponseEntity<GroupDto> saveGroup(@RequestBody @Valid GroupDto groupDto){
+        return new ResponseEntity<>(groupService.save(groupDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{userId}/groups")
-    public List<GroupDto> findAllGroupsByUser(@PathVariable Long userId) throws ResourceNotFoundException {
-        return groupService.findAllByUser(userId);
+    public ResponseEntity<List<GroupDto>> findAllGroupsByUser(@PathVariable Long userId) throws ResourceNotFoundException {
+        return new ResponseEntity<>(groupService.findAllByUser(userId), HttpStatus.OK);
     }
 
     @GetMapping("/groups/{id}")
-    public GroupDto findGroupById(@PathVariable Long id) throws ResourceNotFoundException {
-        return groupService.findById(id);
+    public ResponseEntity<GroupDto> findGroupById(@PathVariable Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(groupService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/groups/{groupId}/journals/{journalId}")
-    public GroupDto addJournalToGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
-        return groupService.addJournal(journalId, groupId);
+    public ResponseEntity<GroupDto> addJournalToGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
+        return new ResponseEntity<>(groupService.addJournal(journalId, groupId), HttpStatus.OK);
     }
 
     @DeleteMapping("/groups/{groupId}/journals/{journalId}")
-    public void removeJournalFromGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
+    public ResponseEntity<String> removeJournalFromGroup(@PathVariable Long groupId, @PathVariable Long journalId) throws ResourceNotFoundException {
         groupService.removeJournal(journalId, groupId);
+        return new ResponseEntity<>("Delete journal with id: " + journalId + " from group with id: " + groupId, HttpStatus.OK);
     }
 
     @GetMapping("/groups/{groupId}/users/{userId}")
-    public GroupDto addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
-        return groupService.addUser(userId, groupId);
+    public ResponseEntity<GroupDto> addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
+        return new ResponseEntity<>(groupService.addUser(userId, groupId), HttpStatus.OK);
     }
 
     @DeleteMapping("/groups/{groupId}/users/{userId}")
-    public void removeUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
+    public ResponseEntity<String> removeUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
         groupService.removeUser(userId, groupId);
+        return new ResponseEntity<>("Delete user with id: " + userId + " from group with id: " + groupId, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/groups/{groupId}")
-    public void deleteGroup(@PathVariable Long groupId) throws ResourceNotFoundException{
+    public ResponseEntity<String> deleteGroup(@PathVariable Long groupId) throws ResourceNotFoundException{
         groupService.deleteGroup(groupId);
+        return new ResponseEntity<>("Delete group with id: " + groupId, HttpStatus.OK);
     }
 
     //TODO update group
