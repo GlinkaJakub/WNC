@@ -17,6 +17,7 @@ public class UserMapper implements Mapper<UserDto, User> {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .matchingPassword(user.getPassword())
+                .enabled(user.getEnabled())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class UserMapper implements Mapper<UserDto, User> {
                 .surname(userDto.getSurname())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
+                .enabled(userDto.getEnabled())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.glinka.wcn;
 
+import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dto.CategoryDto;
@@ -70,7 +71,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testFindGroupByUser() throws UserAlreadyExistException {
+    public void testFindGroupByUser() throws UserAlreadyExistException, InvalidPasswordException {
         int userId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
         UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
@@ -98,7 +99,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testFindGroupById() throws UserAlreadyExistException {
+    public void testFindGroupById() throws UserAlreadyExistException, InvalidPasswordException {
         int groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
         UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
@@ -122,7 +123,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testAddJournalToGroup() throws UserAlreadyExistException {
+    public void testAddJournalToGroup() throws UserAlreadyExistException, InvalidPasswordException {
         int groupId = 1;
         int journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
@@ -150,7 +151,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testRemoveJournalFromGroup() throws ResourceNotFoundException, UserAlreadyExistException {
+    public void testRemoveJournalFromGroup() throws ResourceNotFoundException, UserAlreadyExistException, InvalidPasswordException {
         long groupId = 1;
         long journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
@@ -180,7 +181,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testAddUserToGroup() throws UserAlreadyExistException {
+    public void testAddUserToGroup() throws UserAlreadyExistException, InvalidPasswordException {
         long userId = 2;
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
@@ -205,7 +206,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testRemoveUserFromGroup() throws ResourceNotFoundException, UserAlreadyExistException {
+    public void testRemoveUserFromGroup() throws ResourceNotFoundException, UserAlreadyExistException, InvalidPasswordException {
         long userId = 2;
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);

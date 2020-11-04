@@ -1,8 +1,9 @@
 package com.glinka.wcn.controller;
 
-import com.glinka.wcn.commons.InvalidOldPasswordException;
+import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
+import com.glinka.wcn.model.dto.LoginCredentials;
 import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,18 @@ public class RestUserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> saveUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistException{
+    @PostMapping("login")
+    public void login(@RequestBody LoginCredentials credentials){
+
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> saveUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistException, InvalidPasswordException {
         return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<UserDto> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @PathVariable Long userId) throws ResourceNotFoundException, InvalidOldPasswordException {
+    public ResponseEntity<UserDto> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @PathVariable Long userId) throws ResourceNotFoundException, InvalidPasswordException {
         return new ResponseEntity<>(userService.changePassword(userId, oldPassword, newPassword), HttpStatus.OK);
     }
 

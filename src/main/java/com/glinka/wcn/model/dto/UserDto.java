@@ -36,6 +36,18 @@ public class UserDto {
     @NotNull
     @NotEmpty
     private String surname;
+
+    @PositiveOrZero
+    private byte enabled = 1;
 //    private List<Group> groups;
 
+
+    public UserDto(@PositiveOrZero long id, @Email String email, @Size(min = 8) String password, String matchingPassword, @NotNull @NotEmpty String name, @NotNull @NotEmpty String surname) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.matchingPassword = matchingPassword;
+        this.name = name;
+        this.surname = surname;
+    }
 }

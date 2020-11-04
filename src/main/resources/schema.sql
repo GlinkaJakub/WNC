@@ -34,13 +34,14 @@ create table groups (
 );
 
 create table authorities (
-    user_id varchar(255) not null,
+    auth_id bigint not null auto_increment,
+    email varchar(255) not null,
     authority varchar(255) not null,
-    foreign key (user_id) references users(user_id)
+    foreign key (email) references users(email)
 );
 
 create unique index ix_auth_email
-on authorities (user_id, authority);
+on authorities (email, authority);
 
 create table journals_categories (
     journals_journal_id bigint not null,
