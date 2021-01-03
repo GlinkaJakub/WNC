@@ -30,6 +30,8 @@ create table users (
 create table groups (
     group_id bigint not null auto_increment,
     name varchar(255) not null,
+    owner_user_id bigint not null,
+    foreign key (owner_user_id) references users(user_id),
     primary key (group_id)
 );
 

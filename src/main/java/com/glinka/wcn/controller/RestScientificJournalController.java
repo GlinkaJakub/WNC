@@ -4,6 +4,7 @@ import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class RestScientificJournalController {
@@ -42,8 +44,10 @@ public class RestScientificJournalController {
         List<ScientificJournalDto> data = scientificJournalService.findAll(pageNumber, column, direction);
         //TODO
         if (data == null || data.isEmpty()){
+            log.warn("Journals not found");
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
+        log.info("Returned Journals wih page {}, column {}, direction {}", page, column, direction);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
@@ -95,6 +99,14 @@ public class RestScientificJournalController {
                                                                     @RequestParam(required = false, defaultValue = "journalId") String column,
                                                                     @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction){
         return new ResponseEntity<>(scientificJournalService.findAllByEissn(eissn, page, column, direction), HttpStatus.OK);
+    }
+
+    @GetMapping("/journals/word")
+    public ResponseEntity<List<ScientificJournalDto>> findScientificJournalsByWord(@RequestParam("word") String word,
+                                                                                    @RequestParam(required = false, defaultValue = "0") int page,
+                                                                                    @RequestParam(required = false, defaultValue = "journalId") String column,
+                                                                                    @RequestParam(required = false, defaultValue = "ASC") Sort.Direction direction){
+        return new ResponseEntity<>(scientificJournalService.findAllByWord(word, page, column, direction), HttpStatus.OK);
     }
 
 //    @GetMapping("/groups/{groupId}/journals")

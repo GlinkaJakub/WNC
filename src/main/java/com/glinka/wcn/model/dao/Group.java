@@ -37,6 +37,9 @@ public class Group {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<@Valid User> users;
 
+    @ManyToOne
+    private User owner;
+
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<@Valid Journal> journals;

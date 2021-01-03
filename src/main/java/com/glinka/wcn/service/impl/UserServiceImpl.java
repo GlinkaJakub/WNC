@@ -1,11 +1,14 @@
 package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.InvalidPasswordException;
+import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dao.Authority;
 import com.glinka.wcn.model.dao.User;
 import com.glinka.wcn.model.dto.GroupDto;
+import com.glinka.wcn.model.dto.GroupNameDto;
+import com.glinka.wcn.model.dto.RegisterDto;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.repository.AuthorityRepository;
@@ -13,7 +16,6 @@ import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +29,15 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final Mapper<UserDto, User> userMapper;
+    private final Mapper<RegisterDto, User> registerUserMapper;
     private final UserRepository userRepository;
     private final GroupService groupService;
     private final PasswordEncoder encoder;
     private final AuthorityRepository authorityRepository;
 
-    public UserServiceImpl(Mapper<UserDto, User> userMapper, UserRepository userRepository, GroupService groupService, PasswordEncoder encoder, AuthorityRepository authorityRepository) {
+    public UserServiceImpl(Mapper<UserDto, User> userMapper, Mapper<RegisterDto, User> registerUserMapper, UserRepository userRepository, GroupService groupService, PasswordEncoder encoder, AuthorityRepository authorityRepository) {
         this.userMapper = userMapper;
+        this.registerUserMapper = registerUserMapper;
         this.userRepository = userRepository;
         this.groupService = groupService;
         this.encoder = encoder;
@@ -42,30 +46,26 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto save(UserDto userDto) throws UserAlreadyExistException, InvalidPasswordException {
-        if (emailExist(userDto.getEmail())) {
+    public UserDto save(RegisterDto registerDto) throws UserAlreadyExistException, InvalidPasswordException {
+        if (emailExist(registerDto.getEmail())) {
             throw new UserAlreadyExistException(
-                    "There is an account with email address: " + userDto.getEmail()
+                    "There is an account with email address: " + registerDto.getEmail()
             );
         }
-        if (!userDto.getPassword().equals(userDto.getMatchingPassword())){
+        if (!registerDto.getPassword().equals(registerDto.getMatchingPassword())){
             throw new InvalidPasswordException(
                     "Password not matching"
             );
         }
-//        String salt = BCrypt.gensalt(12);
-//        String hash = BCrypt.hashpw(userDto.getPassword(), salt);
-//        if (BCrypt.checkpw(userDto.getPassword(), hash)){
-//            System.out.println("Zgadza sie");
-//        }
-        String hash = encoder.encode(userDto.getPassword());
-        userDto.setPassword(hash);
-        User newUser = userRepository.save(userMapper.mapToDao(userDto));
+        String hash = encoder.encode(registerDto.getPassword());
+        registerDto.setPassword(hash);
+        User newUser = userRepository.save(registerUserMapper.mapToDao(registerDto));
         List<UserDto> userDtos = new ArrayList<>();
         List<ScientificJournalDto> scientificJournalDtos = new ArrayList<>();
         userDtos.add(userMapper.mapToDto(newUser));
-        GroupDto newGroupDto = new GroupDto(0, newUser.getName() + " group", userDtos, scientificJournalDtos);
-        groupService.save(newGroupDto);
+        UserDto userDto = UserDto.builder().id(registerDto.getId()).enabled(registerDto.getEnabled()).name(registerDto.getName()).surname(registerDto.getSurname()).email(registerDto.getEmail()).build();
+        GroupNameDto groupNameDto = new GroupNameDto(0, "Grupa użytkownika " + newUser.getName() + " " + newUser.getSurname());
+        groupService.save(groupNameDto, newUser.getEmail());
         Authority auth = new Authority(0, userDto.getEmail(), "ROLE_USER");
         authorityRepository.save(auth);
         return userMapper.mapToDto(newUser);
@@ -98,13 +98,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void delete(Long id) throws ResourceNotFoundException {
+    public void delete(String owner, Long id) throws ResourceNotFoundException {
         findById(id);
-        List<Long> idsGroups = groupService.findAllByUser(id).stream().map(GroupDto::getId).collect(Collectors.toList());
+        String email = findById(id).getEmail();
+        List<Long> idsGroups = groupService.findAllByUser(email).stream().map(GroupDto::getId).collect(Collectors.toList());
         idsGroups.forEach(idGroup -> {
             try {
-                groupService.removeUser(id, idGroup);
-            } catch (ResourceNotFoundException e) {
+                groupService.removeUser(owner, id, idGroup);
+            } catch (ResourceNotFoundException | NotAuthorizedException e) {
                 e.printStackTrace();
             }
         });

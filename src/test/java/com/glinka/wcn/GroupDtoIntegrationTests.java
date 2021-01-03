@@ -1,12 +1,15 @@
 package com.glinka.wcn;
 
 import com.glinka.wcn.commons.InvalidPasswordException;
+import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dto.CategoryDto;
 import com.glinka.wcn.model.dto.GroupDto;
+import com.glinka.wcn.model.dto.GroupNameDto;
 import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.model.dto.UserDto;
+import com.glinka.wcn.model.dto.RegisterDto;
 import com.glinka.wcn.service.CategoryService;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
@@ -35,8 +38,9 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     CategoryService categoryService;
 
     @Test
-    public void testCreateGroup(){
-        GroupDto groupDto1 = new GroupDto(1, "newGroup", new ArrayList<>(), new ArrayList<>());
+    public void testCreateGroup() throws UserAlreadyExistException, InvalidPasswordException {
+        UserDto userDto = createUser();
+        GroupDto groupDto1 = new GroupDto(1, "newGroup", new ArrayList<>(), userDto, new ArrayList<>());
         HttpEntity<GroupDto> group = new HttpEntity<>(groupDto1, headers);
 
         ResponseEntity<GroupDto> response = restTemplate.exchange(
@@ -51,12 +55,13 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testFindAllGroup(){
+    public void testFindAllGroup() throws UserAlreadyExistException, InvalidPasswordException {
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        GroupDto groupDto1 = new GroupDto(1, "first group", new ArrayList<>(), new ArrayList<>());
-        GroupDto groupDto2 = new GroupDto(2, "second group", new ArrayList<>(), new ArrayList<>());
-        groupService.save(groupDto1);
-        groupService.save(groupDto2);
+        UserDto userDto = createUser();
+        GroupNameDto groupDto1 = new GroupNameDto(1, "first group");
+        GroupNameDto groupDto2 = new GroupNameDto(2, "second group");
+        groupService.save(groupDto1, "email@wp.pl");
+        groupService.save(groupDto2, "email@wp.pl");
 
         ResponseEntity<GroupDto[]> response = restTemplate.exchange(
                 createURLWithPort("/api/groups"),
@@ -74,14 +79,15 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     public void testFindGroupByUser() throws UserAlreadyExistException, InvalidPasswordException {
         int userId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto2 = new RegisterDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
+        UserDto userDto11 = new UserDto(1, "email@wp.pl", "Jan", "Kowalski");
         userService.save(userDto1);
         userService.save(userDto2);
         List<UserDto> userDtos = new ArrayList<>();
-        userDtos.add(userDto1);
-        GroupDto groupDto = new GroupDto(3, "next group", userDtos, new ArrayList<>());
-        groupService.save(groupDto);
+        userDtos.add(userDto11);
+        GroupNameDto groupDto = new GroupNameDto(3, "next group");
+        groupService.save(groupDto, userDto11.getEmail());
 
         ResponseEntity<GroupDto[]> response = restTemplate.exchange(
                 createURLWithPort("/api/users/{userId}/groups"),
@@ -102,8 +108,8 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     public void testFindGroupById() throws UserAlreadyExistException, InvalidPasswordException {
         int groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto2 = new RegisterDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
 
@@ -127,7 +133,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
         int groupId = 1;
         int journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
         userService.save(userDto1);
         CategoryDto categoryDto = new CategoryDto(1, "category");
         categoryService.save(categoryDto);
@@ -155,7 +161,7 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
         long groupId = 1;
         long journalId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
         userService.save(userDto1);
         CategoryDto categoryDto = new CategoryDto(1, "category");
         categoryService.save(categoryDto);
@@ -185,8 +191,8 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
         long userId = 2;
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto2 = new RegisterDto(2, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
 
@@ -206,30 +212,32 @@ public class GroupDtoIntegrationTests extends BaseIntegrationTests {
     }
 
     @Test
-    public void testRemoveUserFromGroup() throws ResourceNotFoundException, UserAlreadyExistException, InvalidPasswordException {
-        long userId = 2;
+    public void testRemoveUserFromGroup() throws ResourceNotFoundException, UserAlreadyExistException, InvalidPasswordException, NotAuthorizedException {
+        String newUserEmail = "email2@wp.pl";
         long groupId = 1;
         HttpEntity<GroupDto> entity = new HttpEntity<>(null, headers);
-        UserDto userDto1 = new UserDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
-        UserDto userDto2 = new UserDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
+        RegisterDto userDto1 = new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski");
+        RegisterDto userDto2 = new RegisterDto(3, "email2@wp.pl", "password", "password", "Jerzy", "Nowak");
         userService.save(userDto1);
         userService.save(userDto2);
-        groupService.addUser(userId, groupId);
+        groupService.addUser("email@wp.pl", newUserEmail, groupId);
 
         assertEquals(2, groupService.findById(groupId).getUserDtos().size());
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/api/groups/{groupId}/users/{userId}"),
+                createURLWithPort("/api/groups/{groupId}/users/{newUserEmail}"),
                 HttpMethod.DELETE,
                 entity,
                 String.class,
                 groupId,
-                userId
+                newUserEmail
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, groupService.findById(groupId).getUserDtos().size());
     }
 
-
+    private UserDto createUser() throws InvalidPasswordException, UserAlreadyExistException {
+        return userService.save(new RegisterDto(1, "email@wp.pl", "password", "password", "Jan", "Kowalski"));
+    }
 }

@@ -1,5 +1,6 @@
 package com.glinka.wcn.validation;
 
+import com.glinka.wcn.model.dto.RegisterDto;
 import com.glinka.wcn.model.dto.UserDto;
 
 import javax.validation.ConstraintValidator;
@@ -14,7 +15,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
-        UserDto user = (UserDto) o;
+        RegisterDto user = (RegisterDto) o;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

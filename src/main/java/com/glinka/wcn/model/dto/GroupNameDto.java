@@ -14,18 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class GroupDto {
+public class GroupNameDto {
 
     @PositiveOrZero
     private long id;
 
     @NotBlank
     private String name;
-
-    private List<@Valid UserDto> userDtos;
-
-    private UserDto ownerDto;
-
-    private List<@Valid ScientificJournalDto> journals;
-
 }

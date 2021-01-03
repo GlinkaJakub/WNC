@@ -30,6 +30,7 @@ public class GroupMapper implements Mapper<GroupDto, Group> {
                 .name(group.getName())
                 .journals(group.getJournals().stream().map(journalsMapper::mapToDto).collect(Collectors.toList()))
                 .userDtos(group.getUsers().stream().map(userMapper::mapToDto).collect(Collectors.toList()))
+                .ownerDto(userMapper.mapToDto(group.getOwner()))
                 .build();
     }
 
@@ -40,6 +41,7 @@ public class GroupMapper implements Mapper<GroupDto, Group> {
                 .name(groupDto.getName())
                 .journals(groupDto.getJournals().stream().map(journalsMapper::mapToDao).collect(Collectors.toList()))
                 .users(groupDto.getUserDtos().stream().map(userMapper::mapToDao).collect(Collectors.toList()))
+                .owner(userMapper.mapToDao(groupDto.getOwnerDto()))
                 .build();
     }
 }

@@ -17,13 +17,17 @@ import javax.validation.constraints.Size;
 @Builder
 @Data
 @PasswordMatches
-public class UserDto {
+public class RegisterDto {
 
     @PositiveOrZero
     private long id;
 
     @Email
     private String email;
+
+    @Size(min = 8)
+    private String password;
+    private String matchingPassword;
 
     @NotNull
     @NotEmpty
@@ -38,9 +42,11 @@ public class UserDto {
 //    private List<Group> groups;
 
 
-    public UserDto(@PositiveOrZero long id, @Email String email, @NotNull @NotEmpty String name, @NotNull @NotEmpty String surname) {
+    public RegisterDto(@PositiveOrZero long id, @Email String email, @Size(min = 8) String password, String matchingPassword, @NotNull @NotEmpty String name, @NotNull @NotEmpty String surname) {
         this.id = id;
         this.email = email;
+        this.password = password;
+        this.matchingPassword = matchingPassword;
         this.name = name;
         this.surname = surname;
     }

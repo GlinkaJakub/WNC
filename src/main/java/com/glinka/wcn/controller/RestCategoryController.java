@@ -3,6 +3,7 @@ package com.glinka.wcn.controller;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dto.CategoryDto;
 import com.glinka.wcn.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class RestCategoryController {
@@ -34,8 +36,10 @@ public class RestCategoryController {
     public ResponseEntity<List<CategoryDto>> findAllCategory(){
         List<CategoryDto> data = categoryService.findAll();
         if (data == null || data.isEmpty()){
+            log.warn("Category not found");
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
+        log.info("GEt all categories");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 

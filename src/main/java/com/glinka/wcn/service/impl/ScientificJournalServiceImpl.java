@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScientificJournalServiceImpl implements ScientificJournalService {
 
-    public static final int SIZE = 20;
+    public static final int SIZE = 25;
     private final Mapper<ScientificJournalDto, Journal> scientificJournalMapper;
     private final ScientificJournalRepository scientificJournalRepository;
     private final CategoryRepository categoryRepository;
@@ -90,6 +90,12 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     }
 
     @Override
+    public List<ScientificJournalDto> findAllByWord(String word, int page, String column, Sort.Direction direction) {
+        List<Journal> journalList = scientificJournalRepository.findAllByEissn1ContainingOrEissn2ContainingOrIssn1ContainingOrIssn2ContainingOrTitle1ContainingOrTitle2Containing(word.toUpperCase(), word.toUpperCase(), word.toUpperCase(), word.toUpperCase(), word.toUpperCase(), word.toUpperCase(), PageRequest.of(page, SIZE, direction, column));
+        return journalList.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
     public List<ScientificJournalDto> findAllByCategory(Long categoryId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
 //        Sort sort = orderBy(column, direction);
         List<Journal> journalList = scientificJournalRepository.findAllJournals(PageRequest.of(page, SIZE, direction, column));
@@ -108,7 +114,7 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     @Override
     public List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found"));
-        List<GroupDto> groupDtos = groupService.findAllByUser(user.getUserId());
+        List<GroupDto> groupDtos = groupService.findAllByUser(user.getEmail());
         Set<Long> journalIds = new HashSet<>();
         for (GroupDto g : groupDtos){
             journalIds.addAll(g.getJournals().stream().map(ScientificJournalDto::getId).collect(Collectors.toSet()));

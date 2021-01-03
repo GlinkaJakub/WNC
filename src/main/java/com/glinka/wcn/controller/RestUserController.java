@@ -4,11 +4,14 @@ import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
 import com.glinka.wcn.model.dto.LoginCredentials;
+import com.glinka.wcn.model.dto.RegisterDto;
 import com.glinka.wcn.model.dto.UserDto;
 import com.glinka.wcn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,13 +37,13 @@ public class RestUserController {
         this.userService = userService;
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public void login(@RequestBody LoginCredentials credentials){
 
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> saveUser(@RequestBody @Valid UserDto userDto) throws UserAlreadyExistException, InvalidPasswordException {
+    public ResponseEntity<UserDto> saveUser(@RequestBody @Valid RegisterDto userDto) throws UserAlreadyExistException, InvalidPasswordException {
         return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
     }
 
@@ -50,8 +53,9 @@ public class RestUserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
-        userService.delete(id);
+    public ResponseEntity<String> deleteUser(@PathVariable Long id , @AuthenticationPrincipal UsernamePasswordAuthenticationToken user) throws ResourceNotFoundException {
+        String owner = user.getName();
+        userService.delete(owner, id);
         return new ResponseEntity<>("Deleted user with id: " + id, HttpStatus.OK);
     }
 
