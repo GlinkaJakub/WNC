@@ -98,17 +98,20 @@ public class ScientificJournalServiceImpl implements ScientificJournalService {
     @Override
     public List<ScientificJournalDto> findAllByCategory(Long categoryId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException {
 //        Sort sort = orderBy(column, direction);
-        List<Journal> journalList = scientificJournalRepository.findAllJournals(PageRequest.of(page, SIZE, direction, column));
-        Category category = categoryRepository.findById(categoryId).orElseThrow(
-                () -> new ResourceNotFoundException("Category with id: " + categoryId + " not found.")
-        );
-        List<Journal> journalByCategory = new ArrayList<>();
-        for(Journal journal : journalList){
-            if (journal.getCategories().contains(category)){
-                journalByCategory.add(journal);
-            }
-        }
-        return journalByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+//        List<Journal> journalList = scientificJournalRepository.findAllJournals(PageRequest.of(page, SIZE, direction, column));
+//        Category category = categoryRepository.findById(categoryId).orElseThrow(
+//                () -> new ResourceNotFoundException("Category with id: " + categoryId + " not found.")
+//        );
+//        List<Journal> journalByCategory = new ArrayList<>();
+//        for(Journal journal : journalList){
+//            if (journal.getCategories().contains(category)){
+//                journalByCategory.add(journal);
+//            }
+//        }
+//        return journalByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
+        //------------------------
+        List<Journal> journalsByCategory = scientificJournalRepository.findAllByCategoriesIn(categoryId, PageRequest.of(page, SIZE, direction, column));
+        return journalsByCategory.stream().map(scientificJournalMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override

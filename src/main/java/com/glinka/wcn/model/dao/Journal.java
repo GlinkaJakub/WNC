@@ -41,18 +41,18 @@ public class Journal {
     @NotBlank
     private String title1;
 
-    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$")
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$|^$")
     private String issn1;
 
-    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$")
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{3}[0-9xX]$|^$")
     private String eissn1;
 
     private String title2;
 
-    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$")
+    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$|^$")
     private String issn2;
 
-    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$")
+    @Pattern(regexp = "^([0-9]{4}-[0-9]{3}[0-9xX])?$|^$")
     private String eissn2;
 
     @PositiveOrZero
