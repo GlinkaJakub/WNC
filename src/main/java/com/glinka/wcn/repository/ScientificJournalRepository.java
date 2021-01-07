@@ -1,6 +1,5 @@
 package com.glinka.wcn.repository;
 
-import com.glinka.wcn.model.dao.Category;
 import com.glinka.wcn.model.dao.Journal;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
