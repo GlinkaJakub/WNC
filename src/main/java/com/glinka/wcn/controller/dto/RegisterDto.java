@@ -1,4 +1,4 @@
-package com.glinka.wcn.model.dto;
+package com.glinka.wcn.controller.dto;
 
 import com.glinka.wcn.validation.PasswordMatches;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class RegisterDto {
     private String surname;
 
     @PositiveOrZero
-    private byte enabled = 1;
+    private byte enabled = 0;
 //    private List<Group> groups;
 
 

@@ -2,7 +2,7 @@ package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.model.dao.Category;
-import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
 import com.glinka.wcn.repository.CategoryRepository;
 import com.glinka.wcn.service.CategoryService;
 import com.glinka.wcn.service.mapper.Mapper;

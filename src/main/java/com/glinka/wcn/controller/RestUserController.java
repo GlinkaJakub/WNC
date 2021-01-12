@@ -3,9 +3,9 @@ package com.glinka.wcn.controller;
 import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
-import com.glinka.wcn.model.dto.LoginCredentials;
-import com.glinka.wcn.model.dto.RegisterDto;
-import com.glinka.wcn.model.dto.UserDto;
+import com.glinka.wcn.controller.dto.LoginCredentials;
+import com.glinka.wcn.controller.dto.RegisterDto;
+import com.glinka.wcn.controller.dto.UserDto;
 import com.glinka.wcn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +45,11 @@ public class RestUserController {
     @PostMapping("/register")
     public ResponseEntity<UserDto> saveUser(@RequestBody @Valid RegisterDto userDto) throws UserAlreadyExistException, InvalidPasswordException {
         return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/confirm")
+    public ResponseEntity<String> confirmEmail(@RequestParam String token, @RequestParam Long userId) throws ResourceNotFoundException {
+        return new ResponseEntity<>(userService.confirmEmail(token, userId), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/users/{userId}")

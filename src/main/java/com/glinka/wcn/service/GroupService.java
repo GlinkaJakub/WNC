@@ -2,9 +2,9 @@ package com.glinka.wcn.service;
 
 import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.GroupDto;
-import com.glinka.wcn.model.dto.GroupNameDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.GroupDto;
+import com.glinka.wcn.controller.dto.GroupNameDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ public interface GroupService {
     GroupDto addUser(String owner, String newUser, Long groupId) throws ResourceNotFoundException, NotAuthorizedException;
     //   Remove user from group
     void removeUser(String owner, Long userId, Long groupId) throws ResourceNotFoundException, NotAuthorizedException;
+    void removeMyselfFromGroup(String loginUser, Long groupId) throws ResourceNotFoundException, NotAuthorizedException;
     //   Remove journal from group
     void removeJournal(Long scientificJournalId, Long groupId) throws ResourceNotFoundException;
     //   Find Journals by group

@@ -2,8 +2,8 @@ package com.glinka.wcn.service.mapper;
 
 import com.glinka.wcn.model.dao.Category;
 import com.glinka.wcn.model.dao.Journal;
-import com.glinka.wcn.model.dto.CategoryDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

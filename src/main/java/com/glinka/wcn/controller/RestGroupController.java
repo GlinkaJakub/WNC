@@ -2,8 +2,9 @@ package com.glinka.wcn.controller;
 
 import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.GroupDto;
-import com.glinka.wcn.model.dto.GroupNameDto;
+import com.glinka.wcn.controller.dto.GroupDto;
+import com.glinka.wcn.controller.dto.GroupNameDto;
+import com.glinka.wcn.controller.dto.UserDto;
 import com.glinka.wcn.service.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,14 @@ public class RestGroupController {
         String owner = user.getName();
         groupService.removeUser(owner, userId, groupId);
         return new ResponseEntity<>("Delete user with id: " + userId + " from group with id: " + groupId, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/groups/{groupId}/users")
+    public ResponseEntity<String> removeMyselfFromGroup(@PathVariable Long groupId, @AuthenticationPrincipal UsernamePasswordAuthenticationToken user) throws ResourceNotFoundException, NotAuthorizedException {
+        String owner = user.getName();
+        groupService.removeMyselfFromGroup(owner, groupId);
+        return new ResponseEntity<>("Delete user with id: " + owner + " from group with id: " + groupId, HttpStatus.OK);
 
     }
 

@@ -1,25 +1,20 @@
 package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dao.Category;
 import com.glinka.wcn.model.dao.Group;
 import com.glinka.wcn.model.dao.Journal;
 import com.glinka.wcn.model.dao.User;
-import com.glinka.wcn.model.dto.GroupDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.GroupDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import com.glinka.wcn.repository.CategoryRepository;
 import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.repository.UserRepository;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
-import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 

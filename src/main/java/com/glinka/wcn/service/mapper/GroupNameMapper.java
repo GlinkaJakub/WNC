@@ -1,7 +1,7 @@
 package com.glinka.wcn.service.mapper;
 
 import com.glinka.wcn.model.dao.Group;
-import com.glinka.wcn.model.dto.GroupNameDto;
+import com.glinka.wcn.controller.dto.GroupNameDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

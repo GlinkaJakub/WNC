@@ -3,9 +3,9 @@ package com.glinka.wcn.service.mapper;
 import com.glinka.wcn.model.dao.Group;
 import com.glinka.wcn.model.dao.Journal;
 import com.glinka.wcn.model.dao.User;
-import com.glinka.wcn.model.dto.GroupDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
-import com.glinka.wcn.model.dto.UserDto;
+import com.glinka.wcn.controller.dto.GroupDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

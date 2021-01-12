@@ -1,4 +1,4 @@
-package com.glinka.wcn.model.dto;
+package com.glinka.wcn.controller.dto;
 
 import com.glinka.wcn.validation.PasswordMatches;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor

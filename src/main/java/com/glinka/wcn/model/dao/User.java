@@ -43,7 +43,7 @@ public class User {
     private String surname;
 
     @PositiveOrZero
-    private byte enabled = 1;
+    private byte enabled = 0;
 
     @ManyToMany(mappedBy = "users")
     private List<@Valid Group> groups;

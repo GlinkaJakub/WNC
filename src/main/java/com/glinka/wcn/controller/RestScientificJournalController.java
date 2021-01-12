@@ -1,7 +1,7 @@
 package com.glinka.wcn.controller;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;
 import lombok.extern.slf4j.Slf4j;

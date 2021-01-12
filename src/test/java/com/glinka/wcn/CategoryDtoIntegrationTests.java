@@ -1,6 +1,6 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
 import com.glinka.wcn.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

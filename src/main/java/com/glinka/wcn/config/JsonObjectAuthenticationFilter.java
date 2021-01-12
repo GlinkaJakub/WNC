@@ -1,7 +1,7 @@
 package com.glinka.wcn.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.glinka.wcn.model.dto.LoginCredentials;
+import com.glinka.wcn.controller.dto.LoginCredentials;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

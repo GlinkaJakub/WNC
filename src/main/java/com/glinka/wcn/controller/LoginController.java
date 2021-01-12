@@ -1,6 +1,6 @@
 package com.glinka.wcn.controller;
 
-import com.glinka.wcn.model.dto.LoginCredentials;
+import com.glinka.wcn.controller.dto.LoginCredentials;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -48,18 +48,18 @@ insert into users(user_id, email, password, name, surname, enabled)
 insert into users(user_id, email, password, name, surname, enabled)
     values ( 2, 'zuzia@wp.pl', '$2y$12$bkH8QXSciba0YWniVV8rI.vzVKpkGm/QzkfJB37UHStUOs9dM8TK6', 'Zuzanna', 'Nowak', 1);
 insert into users(user_id, email, password, name, surname, enabled)
-    values ( 3, 'jarek@wp.pl', '$2y$12$bkH8QXSciba0YWniVV8rI.vzVKpkGm/QzkfJB37UHStUOs9dM8TK6', 'Jarosław', 'Nowak', 1);
+    values ( 3, 'test@test.pl', '$2y$12$bkH8QXSciba0YWniVV8rI.vzVKpkGm/QzkfJB37UHStUOs9dM8TK6', 'Pan', 'Tester', 1);
 insert into users(user_id, email, password, name, surname, enabled)
     values ( 4, 'marian@wp.pl', '$2y$12$bkH8QXSciba0YWniVV8rI.vzVKpkGm/QzkfJB37UHStUOs9dM8TK6', 'Marian', 'Nowak', 1);
 
 insert into groups(group_id, name, owner_user_id) values ( 1, 'jakuba gr', 1);
 insert into groups(group_id, name, owner_user_id) values ( 2, 'zuzi gr', 2);
-insert into groups(group_id, name, owner_user_id) values ( 3, 'jarka gr', 3);
+insert into groups(group_id, name, owner_user_id) values ( 3, 'Grupa użytkownika Pan Tester', 3);
 insert into groups(group_id, name, owner_user_id) values ( 4, 'mariana gr', 4);
 --
 insert into authorities(auth_id, email, authority) values (1, 'jakub@wp.pl', 'ROLE_USER' );
 insert into authorities(auth_id, email, authority) values (2, 'zuzia@wp.pl', 'ROLE_USER' );
-insert into authorities(auth_id, email, authority) values (3, 'jarek@wp.pl', 'ROLE_USER' );
+insert into authorities(auth_id, email, authority) values (3, 'test@test.pl', 'ROLE_USER' );
 insert into authorities(auth_id, email, authority) values (4, 'marian@wp.pl', 'ROLE_USER' );
 
 insert into groups_users(groups_group_id, users_user_id) values ( 1, 1 );

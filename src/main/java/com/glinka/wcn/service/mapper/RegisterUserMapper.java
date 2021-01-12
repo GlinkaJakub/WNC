@@ -1,8 +1,7 @@
 package com.glinka.wcn.service.mapper;
 
 import com.glinka.wcn.model.dao.User;
-import com.glinka.wcn.model.dto.RegisterDto;
-import com.glinka.wcn.model.dto.UserDto;
+import com.glinka.wcn.controller.dto.RegisterDto;
 import org.springframework.stereotype.Service;
 
 

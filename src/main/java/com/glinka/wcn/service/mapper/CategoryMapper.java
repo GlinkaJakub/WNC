@@ -1,7 +1,7 @@
 package com.glinka.wcn.service.mapper;
 
 import com.glinka.wcn.model.dao.Category;
-import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,7 +1,7 @@
 package com.glinka.wcn.service;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
 
 import java.util.List;
 

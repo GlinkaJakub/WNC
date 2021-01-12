@@ -1,7 +1,6 @@
 package com.glinka.wcn.validation;
 
-import com.glinka.wcn.model.dto.RegisterDto;
-import com.glinka.wcn.model.dto.UserDto;
+import com.glinka.wcn.controller.dto.RegisterDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

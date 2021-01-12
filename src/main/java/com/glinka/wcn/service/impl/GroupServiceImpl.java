@@ -2,12 +2,12 @@ package com.glinka.wcn.service.impl;
 
 import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.controller.dto.GroupDto;
+import com.glinka.wcn.controller.dto.GroupNameDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import com.glinka.wcn.model.dao.Group;
 import com.glinka.wcn.model.dao.Journal;
 import com.glinka.wcn.model.dao.User;
-import com.glinka.wcn.model.dto.GroupDto;
-import com.glinka.wcn.model.dto.GroupNameDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
 import com.glinka.wcn.repository.GroupRepository;
 import com.glinka.wcn.repository.ScientificJournalRepository;
 import com.glinka.wcn.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -117,6 +116,20 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public void removeMyselfFromGroup(String loginUser, Long groupId) throws ResourceNotFoundException, NotAuthorizedException {
+        Group group = groupRepository.findById(groupId).orElseThrow(
+                () -> new ResourceNotFoundException("Group with id: " + groupId + " not found")
+        );
+        User owner = userRepository.findUserByEmail(loginUser);
+        isInGroup(owner.getEmail(), group);
+        List<User> userList = group.getUsers();
+        userList.remove(userRepository.findById(owner.getUserId()).orElseThrow(
+                () -> new ResourceNotFoundException("User with id: " + owner.getUserId() + " not found.")
+        ));
+        groupMapper.mapToDto(groupRepository.saveAndFlush(group));
+    }
+
+    @Override
     public void removeJournal(Long scientificJournalId, Long groupId) throws ResourceNotFoundException {
         Group group = groupRepository.findById(groupId).orElseThrow(
                 () -> new ResourceNotFoundException("Group with id: " + groupId + " not found")
@@ -173,7 +186,14 @@ public class GroupServiceImpl implements GroupService {
     private void isOwner(String owner, Group group) throws NotAuthorizedException {
         User userInGroup = group.getUsers().stream().filter(user -> owner.equals(user.getEmail())).findAny().orElse(null);
         if (userInGroup == null || !group.getOwner().getEmail().equals(owner) || !owner.equals(userInGroup.getEmail())){
-            throw new NotAuthorizedException("User with email: " + owner + " can't add new user to group with id: " + group.getGroupId());
+            throw new NotAuthorizedException("User with email: " + owner + " can't add or delete new user or journal to group with id: " + group.getGroupId());
+        }
+    }
+
+    private void isInGroup(String owner, Group group) throws NotAuthorizedException {
+        User userInGroup = group.getUsers().stream().filter(user -> owner.equals(user.getEmail())).findAny().orElse(null);
+        if (userInGroup == null || !owner.equals(userInGroup.getEmail())){
+            throw new NotAuthorizedException("User with email: " + owner + " can't add or delete new user or journal to group with id: " + group.getGroupId());
         }
     }
 }

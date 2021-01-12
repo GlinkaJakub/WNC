@@ -1,4 +1,4 @@
-package com.glinka.wcn.model.dto;
+package com.glinka.wcn.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

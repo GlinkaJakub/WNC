@@ -1,7 +1,7 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dto.CategoryDto;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.CategoryDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import com.glinka.wcn.service.CategoryService;
 import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.ScientificJournalService;

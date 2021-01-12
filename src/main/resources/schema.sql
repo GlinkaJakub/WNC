@@ -22,7 +22,7 @@ create table users (
     password varchar(255) not null,
     name varchar(255) not null,
     surname varchar(255) not null,
-    enabled tinyint not null default 1,
+    enabled tinyint not null default 0,
 --     primary key (email),
     primary key (user_id)
 );
@@ -67,4 +67,11 @@ create table groups_users(
     foreign key (groups_group_id) references groups(group_id),
     foreign key (users_user_id) references users(user_id),
     unique (groups_group_id, users_user_id)
+);
+
+create table token(
+    id bigint not null auto_increment,
+    token varchar(255) not null,
+    user_id bigint not null,
+    expiry_date timestamp
 );

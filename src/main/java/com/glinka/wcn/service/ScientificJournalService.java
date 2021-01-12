@@ -1,7 +1,7 @@
 package com.glinka.wcn.service;
 
 import com.glinka.wcn.commons.ResourceNotFoundException;
-import com.glinka.wcn.model.dto.ScientificJournalDto;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;

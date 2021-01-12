@@ -1,7 +1,6 @@
 package com.glinka.wcn;
 
-import com.glinka.wcn.model.dto.UserDto;
-import com.glinka.wcn.model.dto.RegisterDto;
+import com.glinka.wcn.controller.dto.RegisterDto;
 import com.glinka.wcn.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
