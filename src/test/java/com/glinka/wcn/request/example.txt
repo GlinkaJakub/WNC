@@ -1,0 +1,122 @@
+categoryDto:
+
+{
+  "name": "categoryDto1"
+}
+
+{
+  "name": "categoryDto2"
+}
+
+{
+  "name": "categoryDto"
+}
+
+userDto:
+
+{
+  "email": "jan@wp.pl",
+  "name": "jan",
+  "password": "haslo",
+  "surname": "kowalski"
+}
+
+{
+  "email": "adam@wp.pl",
+  "name": "adam",
+  "password": "haslo",
+  "surname": "nowak"
+}
+
+{
+  "email": "kamil@onet.pl",
+  "name": "kamil",
+  "password": "haslo",
+  "surname": "bak"
+}
+
+journal:
+
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "string"
+    }
+  ],
+  "eissn1": "z11",
+  "eissn2": "z21",
+  "issn1": "z11",
+  "issn2": "z12",
+  "points": 80,
+  "title1": "ztyt11",
+  "title2": "ztyt12"
+}
+
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "string"
+    }
+  ],
+  "eissn1": "e12",
+  "eissn2": "e22",
+  "issn1": "i12",
+  "issn2": "i22",
+  "points": 20,
+  "title1": "tyt12",
+  "title2": "tyt22"
+}
+
+{
+  "categories": [
+    {
+      "id": 2,
+      "name": "string"
+    }
+  ],
+  "eissn1": "e13",
+  "eissn2": "e23",
+  "issn1": "i13",
+  "issn2": "i23",
+  "points": 30,
+  "title1": "tyt13",
+  "title2": "tyt23"
+}
+
+{
+  "categories": [
+    {
+      "id": 3,
+      "name": "string"
+    }
+  ],
+  "eissn1": "e14",
+  "eissn2": "e24",
+  "issn1": "i14",
+  "issn2": "i24",
+  "points": 40,
+  "title1": "tyt14",
+  "title2": "tyt24"
+}
+
+{
+  "categories": [
+    {
+      "id": 3,
+      "name": "string"
+    }
+  ],
+  "eissn1": "e15",
+  "eissn2": "e25",
+  "issn1": "i15",
+  "issn2": "i25",
+  "points": 50,
+  "title1": "tyt15",
+  "title2": "tyt25"
+}
+
+groupDto:
+
+dodaje automatycznie

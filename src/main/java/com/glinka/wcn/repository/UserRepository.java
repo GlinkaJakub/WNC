@@ -1,14 +1,17 @@
 package com.glinka.wcn.repository;
 
-import com.glinka.wcn.model.dao.UserDao;
+import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.model.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<UserDao, Integer> {
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    List<UserDao> findAllByName(String word);
-    List<UserDao> findAllBySurname(String word);
-    UserDao findUserDaoByEmail(String word);
+    List<User> findAllByName(String name);
+    List<User> findAllBySurname(String surname);
+    User findUserByEmail(String email);
 
 }

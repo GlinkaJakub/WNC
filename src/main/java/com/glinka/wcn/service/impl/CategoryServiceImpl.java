@@ -1,51 +1,58 @@
 package com.glinka.wcn.service.impl;
 
-import com.glinka.wcn.model.converter.ConverterAdapter;
-import com.glinka.wcn.model.dao.CategoryDao;
-import com.glinka.wcn.model.dto.Category;
+import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.model.dao.Category;
+import com.glinka.wcn.controller.dto.CategoryDto;
 import com.glinka.wcn.repository.CategoryRepository;
 import com.glinka.wcn.service.CategoryService;
+import com.glinka.wcn.service.mapper.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private final Mapper<CategoryDto, Category> categoryMapper;
     private final CategoryRepository categoryRepository;
 
-    private final ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter;
-    private final ConverterAdapter<CategoryDao, Category> categoryDtoToDaoConverter;
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ConverterAdapter<Category, CategoryDao> categoryDaoToDtoConverter, ConverterAdapter<CategoryDao, Category> categoryDtoToDaoConverter) {
+    @Autowired
+    public CategoryServiceImpl(Mapper<CategoryDto, Category> categoryMapper, CategoryRepository categoryRepository) {
+        this.categoryMapper = categoryMapper;
         this.categoryRepository = categoryRepository;
-        this.categoryDaoToDtoConverter = categoryDaoToDtoConverter;
-        this.categoryDtoToDaoConverter = categoryDtoToDaoConverter;
     }
 
     @Override
-    public List<Category> findAll() {
-        return categoryDaoToDtoConverter.convertToList(categoryRepository.findAll());
+    public CategoryDto save(CategoryDto categoryDto) {
+        return categoryMapper.mapToDto(categoryRepository.saveAndFlush(categoryMapper.mapToDao(categoryDto)));
     }
 
     @Override
-    public List<Category> findAllById(List<Integer> ids) {
-        return categoryDaoToDtoConverter.convertToList(categoryRepository.findAllById(ids));
+    public CategoryDto findById(Long id) throws ResourceNotFoundException {
+        Optional<Category> categoryDao = categoryRepository.findById(id);
+        return categoryMapper.mapToDto(categoryDao.orElseThrow(
+                () -> new ResourceNotFoundException("Category with id: " + id + " not found")
+        ));
     }
 
     @Override
-    public List<CategoryDao> findAllDaoById(List<Integer> ids) {
-        return categoryRepository.findAllById(ids);
+    public List<CategoryDto> findAll(){
+        return categoryMapper.mapToListDto(categoryRepository.findAll());
     }
 
     @Override
-    public Category findById(int id) {
-        return categoryDaoToDtoConverter.convert(categoryRepository.findById(id).orElse(null));
+    public void delete(Long id) throws ResourceNotFoundException{
+        findById(id);
+        categoryRepository.deleteById(id);
     }
 
     @Override
-    public boolean save(Category category) {
-        categoryRepository.saveAndFlush(categoryDtoToDaoConverter.convert(category));
-        return true;
+    public List<CategoryDto> findAllById(List<Long> ids) {
+        List<Category> categoryList = categoryRepository.findAllById(ids);
+        return categoryList.stream().map(categoryMapper::mapToDto).collect(Collectors.toList());
+//        return categoryMapper.mapToListDto(categoryList);
     }
 }

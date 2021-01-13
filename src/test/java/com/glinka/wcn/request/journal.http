@@ -1,0 +1,58 @@
+### save
+POST http://localhost:8282/saveScientificJournal
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title1": "tyt1",
+  "issn1": "i1",
+  "eissn1": "e1",
+  "title2": "tyt2",
+  "issn2":  "i2",
+  "eissn2": "e2",
+  "points": 50,
+  "categories": [
+    {
+      "id": 2,
+      "name": "categoryDto3"
+    }
+  ]
+}
+
+### findAll
+GET http://localhost:8282/allScientificJournal
+Accept: application/json
+
+### findById
+
+GET http://localhost:8282/findJournalById?id=9
+Accept: application/json
+
+### findAllById
+
+GET http://localhost:8282/findAllJournalsByIds?ids=10,9
+Accept: application/json
+
+### findByTitle
+
+GET http://localhost:8282/findAllJournalsByTitle?title=tyt1
+Accept: application/json
+
+### findByIssn
+
+GET http://localhost:8282/findAllJournalsByIssn?issn=i1
+Accept: application/json
+
+### findByEissn
+
+GET http://localhost:8282/findAllJournalsByEissn?eissn=e1
+Accept: application/json
+
+### findJournalsByGroup
+
+GET http://localhost:8282/findJournalsByGroup?groupId=4
+Accept: application/json
+
+### delete
+GET http://localhost:8282/deleteScientificJournal?id=10
+Accept: application/json

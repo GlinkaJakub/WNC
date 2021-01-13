@@ -1,17 +1,17 @@
 package com.glinka.wcn.service;
 
-import com.glinka.wcn.model.dao.CategoryDao;
-import com.glinka.wcn.model.dto.Category;
+import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.controller.dto.CategoryDto;
 
 import java.util.List;
 
 
 public interface CategoryService {
 
-    List<Category> findAll();
-    List<Category> findAllById(List<Integer> ids);
-    List<CategoryDao> findAllDaoById(List<Integer> ids);
-    Category findById(int id);
-    boolean save(Category category);
+    List<CategoryDto> findAll();
+    List<CategoryDto> findAllById(List<Long> ids);
+    CategoryDto findById(Long id) throws ResourceNotFoundException;
+    CategoryDto save(CategoryDto categoryDto);
+    void delete(Long id) throws ResourceNotFoundException;
 
 }

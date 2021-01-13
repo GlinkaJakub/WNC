@@ -1,9 +1,8 @@
 package com.glinka.wcn.service;
 
-import com.glinka.wcn.model.dao.ScientificJournalDao;
-import com.glinka.wcn.model.dto.Group;
-import com.glinka.wcn.model.dto.ScientificJournal;
-import com.glinka.wcn.model.dto.User;
+import com.glinka.wcn.commons.ResourceNotFoundException;
+import com.glinka.wcn.controller.dto.ScientificJournalDto;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -11,18 +10,24 @@ import java.util.List;
 public interface ScientificJournalService {
 
     //   Show all journals
-    List<ScientificJournal> findAll();
-    List<ScientificJournal> findAllById(List<Integer> ids);
-    List<ScientificJournalDao> findAllDaoById(List<Integer> ids);
-    ScientificJournal findById(int id);
+    List<ScientificJournalDto> findAll(int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllById(List<Long> ids, int page, String column, Sort.Direction direction);
+    ScientificJournalDto findById(Long id) throws ResourceNotFoundException;
     //   Find journal by id/title/issn/eissn/category
-    List<ScientificJournal> findAllBy(String word);
-    //   Find journal by group/user
-    List<ScientificJournal> findAllByUser(User user);
-    List<ScientificJournal> findAllByGroup(Group group);
-    //   Add new journals
-    boolean save(ScientificJournal scientificJournal);
+    List<ScientificJournalDto> findAllByTitle(String word, int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllByIssn(String word, int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllByEissn(String word, int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllByWord(String word, int page, String column, Sort.Direction direction);
+    List<ScientificJournalDto> findAllByCategory(Long categoryId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
+    List<ScientificJournalDto> findAllByUser(Long userId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
+    List<ScientificJournalDto> findAllByGroup(Long groupId, int page, String column, Sort.Direction direction) throws ResourceNotFoundException;
     //   Remove journal
-    boolean remove(ScientificJournal scientificJournal);
+    void delete(Long id) throws ResourceNotFoundException;
+    //   Add new journals
 
+    ScientificJournalDto save(ScientificJournalDto scientificJournalDto);
+    //TODO
+    // find all by category
+    // Find journal by user
+//    List<ScientificJournalDao> findAllDaoById(List<Integer> ids);
 }
