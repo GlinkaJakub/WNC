@@ -40,13 +40,25 @@ public class GenerateFromCSV {
         ) {
             String[] nextRecord;
             while ((nextRecord = csvReader.readNext()) != null) {
-                ScientificJournalDto sj = new ScientificJournalDto(Long.parseLong(nextRecord[0]), nextRecord[1], nextRecord[2], nextRecord[3], nextRecord[4], nextRecord[5], nextRecord[6], Integer.parseInt(nextRecord[7]), Collections.emptyList());
+                ScientificJournalDto sj = new ScientificJournalDto(Long.parseLong(
+                        nextRecord[0]),
+                        nextRecord[1],
+                        nextRecord[2],
+                        nextRecord[3],
+                        nextRecord[4],
+                        nextRecord[5],
+                        nextRecord[6],
+                        Integer.parseInt(nextRecord[7]),
+                        Collections.emptyList());
                 List<Category> categories = new ArrayList<>();
                 System.out.println("Add journal: " + sj);
                 for (int i = 8; i < 52; i++) {
                     if (nextRecord[i].equals("x")){
                         System.out.println("Add category with id: " + i);
-                        categories.add(categoryMapper.mapToDao(categoryService.findById(new Long(i-7))));
+                        categories.add(
+                                categoryMapper.mapToDao(
+                                categoryService.findById((long) (i - 7))
+                                ));
                     }
                 }
                 sj.setCategories(categoryMapper.mapToListDto(categories));

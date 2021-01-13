@@ -3,6 +3,7 @@ package com.glinka.wcn.controller;
 import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
+import com.glinka.wcn.controller.dto.ChangePasswordDto;
 import com.glinka.wcn.controller.dto.LoginCredentials;
 import com.glinka.wcn.controller.dto.RegisterDto;
 import com.glinka.wcn.controller.dto.UserDto;
@@ -52,9 +53,10 @@ public class RestUserController {
         return new ResponseEntity<>(userService.confirmEmail(token, userId), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/users/{userId}")
-    public ResponseEntity<UserDto> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @PathVariable Long userId) throws ResourceNotFoundException, InvalidPasswordException {
-        return new ResponseEntity<>(userService.changePassword(userId, oldPassword, newPassword), HttpStatus.OK);
+    @PutMapping("/users")
+    public ResponseEntity<UserDto> changePassword(@RequestBody ChangePasswordDto changePasswordDto, @AuthenticationPrincipal UsernamePasswordAuthenticationToken user) throws ResourceNotFoundException, InvalidPasswordException {
+        String userEmail = user.getName();
+        return new ResponseEntity<>(userService.changePassword(userEmail, changePasswordDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")

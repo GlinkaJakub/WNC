@@ -4,6 +4,7 @@ import com.glinka.wcn.commons.InvalidPasswordException;
 import com.glinka.wcn.commons.NotAuthorizedException;
 import com.glinka.wcn.commons.ResourceNotFoundException;
 import com.glinka.wcn.commons.UserAlreadyExistException;
+import com.glinka.wcn.controller.dto.ChangePasswordDto;
 import com.glinka.wcn.model.dao.Authority;
 import com.glinka.wcn.model.dao.User;
 import com.glinka.wcn.controller.dto.GroupDto;
@@ -17,6 +18,7 @@ import com.glinka.wcn.service.GroupService;
 import com.glinka.wcn.service.MailSender;
 import com.glinka.wcn.service.UserService;
 import com.glinka.wcn.service.mapper.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final String SERVER_URL = "http://localhost:8282";
+    private final String CLIENT_URL = "http://localhost:3000";
 
     private final Mapper<UserDto, User> userMapper;
     private final Mapper<RegisterDto, User> registerUserMapper;
@@ -82,7 +88,7 @@ public class UserServiceImpl implements UserService {
                 .expiryDate(calculateExpiryDate(60))
                 .build();
         mailSender.save(token);
-        String url = "http://localhost:8282/api/confirm?userId="+ token.getUser().getUserId() +"&token=" + token.getToken();
+        String url = SERVER_URL + "/api/confirm?userId="+ token.getUser().getUserId() +"&token=" + token.getToken();
         mailSender.sendMail(userDto.getEmail(), "Confirm email", "<h1>Kliknij w link aby potwierdzić adres email</h1><br><a href=\"" + url +  "\" >Potwierdź email</a>");
         return userMapper.mapToDto(newUser);
     }
@@ -102,18 +108,27 @@ public class UserServiceImpl implements UserService {
         }
         user.setEnabled(((byte) 1));
         userRepository.save(user);
-        return "Email confirmed <a href=\"http://localhost:3000/login\">Login page</a>";
+        return "Email confirmed <a href=\"" + CLIENT_URL + "/login\">Login page</a>";
     }
 
     @Transactional
     @Override
-    public UserDto changePassword(Long userId, String oldPassword, String newPassword) throws ResourceNotFoundException, InvalidPasswordException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with id :" + userId + " not found"));
-        if (!user.getPassword().equals(oldPassword) || newPassword.length() < 8) {
+    public UserDto changePassword(String userEmail, ChangePasswordDto changePasswordDto) throws InvalidPasswordException {
+        User user = userRepository.findUserByEmail(userEmail);
+        if (!encoder.matches(changePasswordDto.getOldPassword(), user.getPassword()) || changePasswordDto.getOldPassword().length() < 8) {
+            log.warn("wrong old password when " + userEmail + "  try change");
             throw new InvalidPasswordException("Wrong old password");
         }
-        user.setPassword(newPassword);
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword())){
+            log.warn("new password don't match when " + userEmail + "  try change");
+            throw new InvalidPasswordException(
+                    "Password not matching"
+            );
+        }
+        String hash = encoder.encode(changePasswordDto.getNewPassword());
+        user.setPassword(hash);
         userRepository.save(user);
+        log.info("user " + userEmail + " changed password");
         return userMapper.mapToDto(user);
     }
 
